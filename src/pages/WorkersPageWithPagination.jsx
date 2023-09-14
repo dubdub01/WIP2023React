@@ -42,12 +42,13 @@ const WorkersPageWithPagination = (props) => {
           <div class="col-md-4">
             <div class="card bg-light mb-3">
               <div class="card-header text-center">
-                <a href="#">{worker.name}</a>
+                <a href="#">{worker.firstname}{worker.lastname}</a>
               </div>
               <div class="card-body">
                 <div class="card-text">
-                  {worker.sector.length}
-                  <div class="text-center mt-3">{worker.cover}</div>
+                  {worker.age}
+                  <div class="text-center mt-3">{worker.gender}</div>
+                  <div class="text-center mt-3">{worker.description}</div>
                 </div>
               </div>
             </div>

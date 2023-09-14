@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const HomePage = (props) => {
     return ( 
         <>
@@ -6,12 +8,12 @@ const HomePage = (props) => {
             <h1 class="display-4">Bienvenue sur WIP - Work in Progress !</h1>
             <p class="lead">WIP est une plateforme en ligne qui facilite la mise en relation entre les entreprises et les talents. Que vous soyez une entreprise à la recherche de professionnels qualifiés ou un travailleur indépendant en quête d'opportunités, WIP est là pour vous aider à trouver les bonnes personnes.</p>
             <div class="d-flex flex-column align-items-center">
-                <a href="#" class="btn btn-primary my-2">Découvrir nos Companies</a>
-                <a href="#" class="btn btn-primary my-2">Découvrir nos Workers</a>
+                <Link to="/companiespage" class="btn btn-primary my-2">Découvrir nos Companies</Link>
+                <Link to="/workerspage" class="btn btn-primary my-2">Découvrir nos Workers</Link>
             </div>
             <div class="mt-4">
-                <a href="#" class="btn btn-outline-primary mx-2">Inscription</a>
-                <a href="#" class="btn btn-outline-primary mx-2">Connexion</a>
+                <Link to="#" class="btn btn-outline-primary mx-2">Inscription</Link>
+                <Link to="#" class="btn btn-outline-primary mx-2">Connexion</Link>
             </div>
         </div>
     </section>
