@@ -76,8 +76,7 @@ const WorkersPage = (props) => {
             <div class="card bg-light mb-3">
               <div class="card-header text-center">
                 <a href="#">
-                  {worker.firstname}
-                  {worker.lastname}
+                  {worker.firstname}&nbsp;{worker.lastname}
                 </a>
               </div>
               <div class="card-body">
