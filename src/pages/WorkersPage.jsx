@@ -1,58 +1,106 @@
-import { useState, useEffect } from 'react';
-import Axios from "axios"
+import { useState, useEffect } from "react";
+import Pagination from "../components/Pagination";
+import WorkersAPI from "../services/WorkersAPI";
 
 const WorkersPage = (props) => {
+  const [workers, setWorkers] = useState([]);
 
-    const [workers, setWorkers] = useState([])
+  // pour la pagination
+  const [currentPage, setCurrentPage] = useState(1);
 
-    useEffect(()=>{
-        Axios.get("http://127.0.0.1:8000/api/workers")
-            .then(response => response.data['hydra:member'])
-            .then(data => setWorkers(data))
-            .catch(error => console.log(error.response))
-    },[])
+  // pour le filtre
+  const [search, setSearch] = useState("");
 
-    return ( 
-        <>
-            <h1>Liste des clients</h1>
-            <table className="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Firstname</th>
-                        <th>Lastname</th>
-                        <th>Age</th>
-                        <th>Gender</th>
-                        <th className='text-center'>Description</th>
-                        <th className='text-center'>Slug</th>
-                        <th className='text-center'>Skills</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {workers.map(worker => (
-                        <tr key={worker.id}>
-                            <td>{worker.id}</td>
-                            <td>{worker.firstname} </td>
-                            <td>{worker.lastname} </td>
-                            <td>{worker.age}</td>
-                            <td>{worker.gender}</td>
-                            <td>{worker.description}</td>
-                            <td>{worker.slug}</td>
-                            <td className='text-center'>
-                                <span className='badge bg-primary badge-primary'>
-                                    {worker.skills.length}
-                                </span>
-                            </td>
-                            <td>
-                                <button className='btn btn-sm btn-danger'>Supprimer</button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </>
-     );
-}
+  const fetchWorkers = async () => {
+    try {
+      const data = await WorkersAPI.findAll();
+      setWorkers(data);
+    } catch (error) {
+      //notif à faire
+      console.log(error.response);
+    }
+  };
+
+  useEffect(() => {
+    fetchWorkers();
+  }, []);
+
+  //pour le filtre
+  const handleSearch = (event) => {
+    const value = event.currentTarget.value;
+    setSearch(value);
+    setCurrentPage(1);
+  };
+
+  const filteredWorkers = workers.filter(
+    (c) =>
+      c.firstname.toLowerCase().includes(search.toLowerCase()) ||
+      c.lastname.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const itemsPerPage = 9;
+
+  const paginatedWorkers = Pagination.getData(
+    filteredWorkers,
+    currentPage,
+    itemsPerPage
+  );
+
+  return (
+    <>
+      {/*  filtre */}
+      <div className="form-group">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Rechercher..."
+          value={search}
+          onChange={handleSearch}
+        />
+      </div>
+      {/* Et logique (&&) expr1 && expr2 renvoire expr1 si cette expression peut être conrtie en false, sinon renvoie expre2 */}
+
+      {workers.length === 0 && (
+        <div class="alert alert-info" role="alert">
+          Aucune entreprise ne correspond à votre filtre.
+        </div>
+      )}
+
+      {paginatedWorkers.map((worker) => (
+        <div class="row">
+          <div class="col-md-4">
+            <div class="card bg-light mb-3">
+              <div class="card-header text-center">
+                <a href="#">
+                  {worker.firstname}
+                  {worker.lastname}
+                </a>
+              </div>
+              <div class="card-body">
+                <div class="card-text">
+                  {worker.age}
+                  <div class="text-center mt-3">{worker.gender}</div>
+                  <div class="text-center mt-3">{worker.description}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+      {itemsPerPage < filteredWorkers.length && 
+        <Pagination
+          currentPage={currentPage}
+          itemsPerPage={itemsPerPage}
+          length={filteredWorkers.length}
+          onPageChanged={handlePageChange}
+        />
+      }
+    </>
+  );
+};
 
 export default WorkersPage;

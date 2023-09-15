@@ -3,8 +3,7 @@ import Navbar from "./components/Navbar";
 import WorkersPage from "./pages/WorkersPage";
 import CompaniesPage from "./pages/CompaniesPage";
 import HomePage from "./pages/HomePage";
-import CompaniesPageWithPagination from "./pages/CompaniesPageWithPagination";
-import WorkersPageWithPagination from "./pages/WorkersPageWithPagination";
+import Legal from "./pages/Legal";
 
 
 const App = () => {
@@ -16,8 +15,7 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/workers" element={<WorkersPage />} />
           <Route path="/companies" element={<CompaniesPage />} />
-          <Route path="/companiespage" element={<CompaniesPageWithPagination />} />
-          <Route path="/workerspage" element={<WorkersPageWithPagination />} />
+          <Route path="/legal" element={<Legal />} />
         </Routes>
       </main>
     </Router>
