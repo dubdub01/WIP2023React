@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Pagination from "../components/Pagination";
 import WorkersAPI from "../services/WorkersAPI";
+import { Link } from "react-router-dom";
 
 const WorkersPage = (props) => {
   const [workers, setWorkers] = useState([]);
@@ -24,6 +25,18 @@ const WorkersPage = (props) => {
   useEffect(() => {
     fetchWorkers();
   }, []);
+
+  const handleDelete = async (id) => {
+    const originalWorkers = [...workers];
+
+    setWorkers(workers.filter((worker) => worker.id !== id));
+
+    try {
+      await WorkersAPI.delete(id);
+    } catch (error) {
+      setWorkers(originalWorkers);
+    }
+  };
 
   //pour le filtre
   const handleSearch = (event) => {
@@ -75,29 +88,35 @@ const WorkersPage = (props) => {
           <div class="col-md-4">
             <div class="card bg-light mb-3">
               <div class="card-header text-center">
-                <a href="#">
+                <Link to="http://localhost:3000/workers/{id}">
                   {worker.firstname}&nbsp;{worker.lastname}
-                </a>
+                </Link>
               </div>
               <div class="card-body">
                 <div class="card-text">
                   {worker.age}
                   <div class="text-center mt-3">{worker.gender}</div>
                   <div class="text-center mt-3">{worker.description}</div>
+                  <button
+                    className="btn btn-sm btn-danger"
+                    onClick={() => handleDelete(worker.id)}
+                  >
+                    Supprimer
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
       ))}
-      {itemsPerPage < filteredWorkers.length && 
+      {itemsPerPage < filteredWorkers.length && (
         <Pagination
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}
           length={filteredWorkers.length}
           onPageChanged={handlePageChange}
         />
-      }
+      )}
     </>
   );
 };
