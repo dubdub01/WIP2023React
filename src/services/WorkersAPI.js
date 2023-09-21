@@ -9,6 +9,7 @@ function findAll() {
 function find(id)
 {
   return Axios.get(`http://127.0.0.1:8000/api/workers/${id}`)
+              .then(response => response.data)
 }
 
 function deleteWorker(id){
