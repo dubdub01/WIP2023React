@@ -1,59 +1,59 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import WorkersAPI from '../services/WorkersAPI';
-import SkillsAPI from '../services/SkillsAPI';
-  
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import WorkersAPI from "../services/WorkersAPI";
+import { toast } from "react-toastify";
+import DeleteConfirmation from "../components/DeleteConfirmation";
+
 const WorkerPage = () => {
-  const { id = 'new' } = useParams();
+  const { id = "new" } = useParams();
   const navigate = useNavigate();
 
   const [worker, setWorker] = useState({
-    lastname: '',
-    firstname: '',
-    gender: '',
-    age: '',
-    description: '',
+    lastname: "",
+    firstname: "",
+    gender: "",
+    age: "",
+    description: "",
     skills: [], // Nous stockerons les noms des compétences ici
   });
 
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
   useEffect(() => {
-    if (id !== 'new') {
+    if (id !== "new") {
       fetchWorker(id);
     }
   }, [id]);
 
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    return new Date(dateString).toLocaleDateString('fr-FR', options);
+    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+    return new Date(dateString).toLocaleDateString("fr-FR", options);
+  };
+
+  const handleDelete = async () => {
+    const originalWorker = { ...worker };
+
+    try {
+      await WorkersAPI.delete(worker.id);
+      toast.success("Le travailleur a bien été supprimé");
+      navigate("/workers");
+    } catch (error) {
+      setWorker(originalWorker);
+    }
   };
 
   const fetchWorker = async (id) => {
     try {
       const workerData = await WorkersAPI.find(id);
-      // const skillsData = await Promise.all(
-      //   workerData.skills.map(async (skillUrl) => {
-      //     try {
-      //       console.log('Récupération des données de la compétence :', skillUrl);
-      //       const skillData = await SkillsAPI.find(skillUrl);
-      //       return skillData.name;
-      //     } catch (error) {
-      //       console.error('Erreur lors de la récupération du nom de la compétence :', error);
-      //       return 'Nom de compétence non disponible'; // Vous pouvez gérer l'erreur comme vous le souhaitez
-      //     }
-      //   })
-      // );
-  
+
       const formattedAge = formatDate(workerData.age);
-  
-      // Mettez à jour l'état worker avec les noms des compétences
+
       setWorker({
         ...workerData,
         age: formattedAge,
-        // skills: skillsData,
       });
     } catch (error) {
-      // Gérez l'erreur ici (par exemple, redirigez vers la liste des travailleurs)
-      navigate('/workers', { replace: true });
+      navigate("/workers", { replace: true });
     }
   };
 
@@ -75,11 +75,26 @@ const WorkerPage = () => {
               <h5>Description:</h5>
               <p>{worker.description}</p>
               <h5>Compétences:</h5>
-              {/* <ul>
+              <ul>
                 {worker.skills.map((skill, index) => (
                   <li key={index}>{skill}</li>
                 ))}
-              </ul> */}
+              </ul>
+
+              <div>
+                {/* Afficher le bouton de suppression */}
+                <button onClick={() => setShowConfirmation(true)}>
+                  Supprimer
+                </button>
+
+                {/* Afficher la confirmation si showConfirmation est true */}
+                {showConfirmation && (
+                  <DeleteConfirmation
+                    onConfirm={handleDelete}
+                    onCancel={() => setShowConfirmation(false)}
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>

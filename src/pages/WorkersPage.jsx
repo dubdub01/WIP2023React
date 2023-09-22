@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import WorkersAPI from "../services/WorkersAPI";
+import SkillsAPI from "../services/SkillsAPI";
 import Pagination from "../components/Pagination";
 import { Link } from "react-router-dom";
 
@@ -7,9 +8,12 @@ const WorkersPage = (props) => {
   const [workers, setWorkers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [skills, setSkills] = useState([]);
+  const [selectedSkill, setSelectedSkill] = useState("");
 
   useEffect(() => {
     fetchWorkers();
+    fetchSkills();
   }, []);
 
   const fetchWorkers = async () => {
@@ -21,16 +25,18 @@ const WorkersPage = (props) => {
     }
   };
 
-  const handleDelete = async (id) => {
-    const originalWorkers = [...workers];
-
-    setWorkers(workers.filter((worker) => worker.id !== id));
-
+  const fetchSkills = async () => {
     try {
-      await WorkersAPI.delete(id);
+      const data = await SkillsAPI.findAll();
+      setSkills(data);
     } catch (error) {
-      setWorkers(originalWorkers);
+      console.error("Erreur lors de la récupération des compétences:", error);
     }
+  };
+
+  const formatDate = (dateString) => {
+    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+    return new Date(dateString).toLocaleDateString("fr-FR", options);
   };
 
   const handleSearch = (event) => {
@@ -39,13 +45,25 @@ const WorkersPage = (props) => {
     setCurrentPage(1);
   };
 
+  const handleSkillChange = (event) => {
+    const value = event.currentTarget.value;
+    setSelectedSkill(value);
+    setCurrentPage(1);
+  };
+
   const itemsPerPage = 9;
 
-  const filteredWorkers = workers.filter(
+  let filteredWorkers = workers.filter(
     (c) =>
       c.firstname.toLowerCase().includes(search.toLowerCase()) ||
       c.lastname.toLowerCase().includes(search.toLowerCase())
   );
+
+  if (selectedSkill) {
+    filteredWorkers = filteredWorkers.filter((worker) =>
+      worker.skills.includes(selectedSkill)
+    );
+  }
 
   const paginatedWorkers = Pagination.getData(
     filteredWorkers,
@@ -65,6 +83,23 @@ const WorkersPage = (props) => {
         />
       </div>
 
+      <div className="form-group">
+        <label htmlFor="skill">Compétence :</label>
+        <select
+          id="skill"
+          className="form-control"
+          value={selectedSkill}
+          onChange={handleSkillChange}
+        >
+          <option value="">Toutes les compétences</option>
+          {skills.map((skill) => (
+            <option key={skill.id} value={skill.id}>
+              {skill.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {filteredWorkers.length === 0 && (
         <div className="alert alert-info" role="alert">
           Aucune entreprise ne correspond à votre filtre.
@@ -82,15 +117,17 @@ const WorkersPage = (props) => {
               </div>
               <div className="card-body">
                 <div className="card-text">
-                  {worker.age}
+                  {formatDate(worker.age)} {/* Formatage de la date */}
                   <div className="text-center mt-3">{worker.gender}</div>
                   <div className="text-center mt-3">{worker.description}</div>
-                  <button
-                    className="btn btn-sm btn-danger"
-                    onClick={() => handleDelete(worker.id)}
-                  >
-                    Supprimer
-                  </button>
+                  <div className="text-center mt-3">
+                    <h5>Compétences :</h5>
+                    <ul>
+                      {worker.skills.map((skill, index) => (
+                        <li key={index}>{skill}</li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>

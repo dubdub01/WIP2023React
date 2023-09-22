@@ -9,6 +9,11 @@ import LoginPage from "./pages/LoginPage";
 import AuthAPI from "./services/AuthAPI";
 import WorkerPage from "./pages/WorkerPage";
 import AuthContext from "./contexts/AuthContext";
+import RegistrationPage from "./pages/RegistrationPage";
+import UserPage from "./pages/UserPage";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css'
+
 
 AuthAPI.setup()
 
@@ -37,10 +42,12 @@ const App = () => {
           <Route path="/companies" element={<CompaniesPage />} />
           <Route path="/legal" element={<Legal />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/registration" element={<RegistrationPage />} />
+          <Route path="/user" element={<UserPage />} />
         </Routes>
       </main>
     </Router>
-
+    <ToastContainer position={toast.POSITION.BOTTOM_LEFT} />
     </AuthContext.Provider>
     
   );

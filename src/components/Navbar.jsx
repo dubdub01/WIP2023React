@@ -2,6 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import AuthAPI from "../services/AuthAPI";
 import { useContext } from "react";
 import AuthContext from "../contexts/AuthContext";
+import { toast } from "react-toastify";
 
 const Navbar = (props) => {
   const navigate = useNavigate()
@@ -10,7 +11,9 @@ const Navbar = (props) => {
   const handleLogout = () => {
     AuthAPI.logout();
     setIsAuthenticated(false)
+    toast.info("Vous êtes désormais déconnecté")
     navigate("/login", { replace: true });
+
   };
 
   return (
@@ -57,7 +60,7 @@ const Navbar = (props) => {
             {!isAuthenticated ? (
               <>
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="/">
+                  <NavLink className="nav-link" to="/registration">
                     Inscription
                   </NavLink>
                 </li>
@@ -68,11 +71,20 @@ const Navbar = (props) => {
                 </li>
               </>
             ) : (
+              <div>
+
+              
               <li className="nav-item">
                 <button className="btn btn-danger" onClick={handleLogout}>
                   Déconnexion
                 </button>
               </li>
+              <li>
+                <NavLink className="btn btn-success" to="/user">
+                  Mon compte
+                </NavLink>
+              </li>
+              </div>
             )}
           </ul>
         </div>
