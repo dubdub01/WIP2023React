@@ -51,8 +51,8 @@ const RegisterPage = () => {
               url: "http://127.0.0.1:8000/api/users/upload",
               data: formData,
               headers: { "Content-type":"multipart/form-data; charset=utf-8; boundary=" + Math.random().toString().substring(2)}
-          }).then(response => {
-              console.log(response.data)
+            }).then(response => {
+            console.log(response)
           })
 
       }catch({response}){

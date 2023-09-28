@@ -5,16 +5,19 @@ const UserPage = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-  // Appelez votre API pour récupérer les informations de l'utilisateur
-  UserApi.find()
-    .then((response) => {
-      console.log('Réponse complète de la requête AJAX :', response);
-      setUser(response.data);
-    })
-    .catch((error) => {
-      console.error('Erreur lors de la récupération des informations de l\'utilisateur :', error);
-    });
-}, []);
+    // Appelez votre API pour récupérer les informations de l'utilisateur
+    UserApi.find()
+      .then((response) => {
+        // Accédez aux données de l'utilisateur dans la réponse
+        const userData = response['hydra:member'];
+        console.log(userData[0].company)
+        // Mettez à jour l'état de l'utilisateur avec les données
+        setUser(userData[0]);
+      })
+      .catch((error) => {
+        console.error('Erreur lors de la récupération des informations de l\'utilisateur :', error);
+      });
+  }, []);
 
   if (!user) {
     return <div>Chargement en cours...</div>;
