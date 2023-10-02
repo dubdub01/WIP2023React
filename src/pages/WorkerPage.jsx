@@ -77,7 +77,7 @@ const WorkerPage = () => {
               <h5>Compétences:</h5>
               <ul>
                 {worker.skills.map((skill, index) => (
-                  <li key={index}>{skill}</li>
+                  <li key={index}>{skill.name}</li>
                 ))}
               </ul>
 

@@ -61,8 +61,9 @@ const WorkersPage = (props) => {
 
   if (selectedSkill) {
     filteredWorkers = filteredWorkers.filter((worker) =>
-      worker.skills.includes(selectedSkill)
+    worker.skills.some((skill) => skill.id === selectedSkill)
     );
+    console.log(selectedSkill);
   }
 
   const paginatedWorkers = Pagination.getData(
@@ -124,7 +125,7 @@ const WorkersPage = (props) => {
                     <h5>Compétences :</h5>
                     <ul>
                       {worker.skills.map((skill, index) => (
-                        <li key={index}>{skill}</li>
+                        <li key={index}>{skill.name}</li>
                       ))}
                     </ul>
                   </div>

@@ -55,7 +55,14 @@ const CompaniesPage = (props) => {
               <div class="card-body">
                 <div class="card-text">
                   {company.sector.length}
+                  <div class="text-center mt-3">{company.description}</div>
                   <div class="text-center mt-3">{company.cover}</div>
+                  <ul>
+                {company.sector.map((sector, index) => (
+                  <li key={index}>{sector.name}</li>
+                ))}
+              </ul>
+                  {company.provinceName.name}
                 </div>
               </div>
             </div>
