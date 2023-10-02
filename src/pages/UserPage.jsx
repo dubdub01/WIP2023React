@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import UserApi from "../services/UserApi";
+import { BASE_URL } from "../config";
 
 const UserPage = () => {
   const [user, setUser] = useState(null);
@@ -31,6 +32,11 @@ const UserPage = () => {
       <h1>Informations de l'utilisateur</h1>
       <p>Nom d'utilisateur : {user.username}</p>
       <p>Adresse e-mail : {user.eMail}</p>
+      <p>cover : {user.image}</p>
+      <img
+        src={`${BASE_URL}uploads/images/${user.image}`}
+        alt="Couverture de l'utilisateur"
+      />
       {/* Affichez d'autres informations de l'utilisateur ici */}
 
       <h2>Entreprises</h2>
@@ -39,6 +45,19 @@ const UserPage = () => {
           <div key={index}>
             <p>
               {company.name}
+              <br />
+              {company.description}
+              <br />
+              {company.sector.map((sector, index) => (
+                <li key={index}>{sector.name}</li>
+              ))}
+              <br />
+              <img
+                src={`${BASE_URL}uploads/images/${company.cover}`}
+                alt="Couverture de l'utilisateur"
+              />
+              <br />
+              {company.provinceName.name}
             </p>
           </div>
         ))}
@@ -50,6 +69,12 @@ const UserPage = () => {
           <div key={index}>
             <p>{worker.firstname}</p>
             <p>{worker.lastname}</p>
+            <p>{worker.age}</p>
+            <p>{worker.gender}</p>
+            <p>{worker.description}</p>
+            <a>{worker.cv}</a>
+
+
           </div>
         ))}
       </ul>

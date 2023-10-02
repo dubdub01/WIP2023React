@@ -1,23 +1,24 @@
 import Axios from "axios";
+import { WORKERS_API } from "../config";
 
 function findAll() {
-  return Axios.get('http://127.0.0.1:8000/api/workers').then(
+  return Axios.get(WORKERS_API).then(
     (response) => response.data["hydra:member"]
   );
 }
 
 function find(id)
 {
-  return Axios.get(`http://127.0.0.1:8000/api/workers/${id}`)
+  return Axios.get(`${WORKERS_API}/${id}`)
               .then(response => response.data)
 }
 
 function deleteWorker(id){
-  return Axios.delete(`http://127.0.0.1:8000/api/workers/${id}`)
+  return Axios.delete(`${WORKERS_API}/${id}`)
 }
 
-async function getSkills(workerId) {
-  const response = await Axios.get(`http://127.0.0.1:8000/api/workers/${workerId}/skills`);
+async function getSkills(id) {
+  const response = await Axios.get(`${WORKERS_API}/${id}/skills`);
   return response.data['hydra:member'];
 }
 

@@ -1,7 +1,8 @@
 import Axios from "axios";
+import { SKILLS_API } from "../config";
 
 function findAll() {
-  return Axios.get('http://127.0.0.1:8000/api/skills').then(
+  return Axios.get(SKILLS_API).then(
     (response) => response.data["hydra:member"]
   );
 }

@@ -1,7 +1,8 @@
 import Axios from "axios";
+import { COMPANIES_API } from "../config";
 
 function findAll() {
-  return Axios.get("http://127.0.0.1:8000/api/companies").then(
+  return Axios.get(COMPANIES_API).then(
     (response) => response.data["hydra:member"]
   );
 }
