@@ -45,26 +45,25 @@ const WorkersPage = (props) => {
     setCurrentPage(1);
   };
 
-  const handleSkillChange = (event) => {
-    const value = event.currentTarget.value;
-    setSelectedSkill(value);
-    setCurrentPage(1);
-  };
-
   const itemsPerPage = 9;
 
-  let filteredWorkers = workers.filter(
-    (c) =>
-      c.firstname.toLowerCase().includes(search.toLowerCase()) ||
-      c.lastname.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredWorkers = workers.filter((worker) => {
+    const isNameMatch =
+      worker.firstname.toLowerCase().includes(search.toLowerCase()) ||
+      worker.lastname.toLowerCase().includes(search.toLowerCase());
 
-  if (selectedSkill) {
-    filteredWorkers = filteredWorkers.filter((worker) =>
-    worker.skills.some((skill) => skill.id === selectedSkill)
-    );
-    console.log(selectedSkill);
-  }
+    const isSkillMatch =
+      selectedSkill === "" || // Si aucun skill n'est sélectionné, ne pas filtrer par skill
+      worker.skills.some((skill) => skill.name === selectedSkill);
+
+    return isNameMatch && isSkillMatch;
+  });
+
+  const alertMessage = filteredWorkers.length === 0 && (
+    <div className="alert alert-info" role="alert">
+      Aucune entreprise ne correspond à votre filtre.
+    </div>
+  );
 
   const paginatedWorkers = Pagination.getData(
     filteredWorkers,
@@ -90,22 +89,18 @@ const WorkersPage = (props) => {
           id="skill"
           className="form-control"
           value={selectedSkill}
-          onChange={handleSkillChange}
+          onChange={(event) => setSelectedSkill(event.currentTarget.value)}
         >
           <option value="">Toutes les compétences</option>
           {skills.map((skill) => (
-            <option key={skill.id} value={skill.id}>
+            <option key={skill.id} value={skill.name}>
               {skill.name}
             </option>
           ))}
         </select>
       </div>
 
-      {filteredWorkers.length === 0 && (
-        <div className="alert alert-info" role="alert">
-          Aucune entreprise ne correspond à votre filtre.
-        </div>
-      )}
+      {alertMessage}
 
       {paginatedWorkers.map((worker) => (
         <div className="row" key={worker.id}>

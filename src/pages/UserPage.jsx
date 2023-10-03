@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import UserApi from "../services/UserApi";
 import { BASE_URL } from "../config";
+import { Link } from "react-router-dom";
 
 const UserPage = () => {
   const [user, setUser] = useState(null);
@@ -72,9 +73,13 @@ const UserPage = () => {
             <p>{worker.age}</p>
             <p>{worker.gender}</p>
             <p>{worker.description}</p>
-            <a>{worker.cv}</a>
 
-
+            <Link
+              className="btn btn-primary mx-2 d-block"
+              to={`${BASE_URL}uploads/cv/${worker.cv}`}
+            >
+              cv de {worker.firstname} {worker.lastname}
+            </Link>
           </div>
         ))}
       </ul>

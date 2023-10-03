@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import WorkersAPI from "../services/WorkersAPI";
 import { toast } from "react-toastify";
 import DeleteConfirmation from "../components/DeleteConfirmation";
+import { BASE_URL } from "../config";
+import { Link } from "react-router-dom";
 
 const WorkerPage = () => {
   const { id = "new" } = useParams();
@@ -80,6 +82,9 @@ const WorkerPage = () => {
                   <li key={index}>{skill.name}</li>
                 ))}
               </ul>
+              <Link className="btn btn-primary mx-2 d-block" to={`${BASE_URL}uploads/cv/${worker.cv}`}>
+                  cv de {worker.firstname} {worker.lastname}
+                </Link>
 
               <div>
                 {/* Afficher le bouton de suppression */}
