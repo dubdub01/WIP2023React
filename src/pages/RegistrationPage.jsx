@@ -54,28 +54,21 @@ const RegisterPage = () => {
               headers: { "Content-type":"multipart/form-data; charset=utf-8; boundary=" + Math.random().toString().substring(2)}
             }).then(response => {
             console.log(response)
-          })
-
-      }catch({response}){
-          console.log(response)
-      }
-
-            
-            
-        //     setErrors({})
-        //     toast.success("Vous êtes inscrit, vous pouvez vous connecter")
-        //     navigate("/login", {replace: true})
-        // }catch({response})
-        // {
-        //     const {violations} = response.data
-        //     if(violations){
-        //         violations.forEach(({propertyPath, message})=>{
-        //             apiErrors[propertyPath] = message
-        //         })
-        //         setErrors(apiErrors)
-        //     }
-        //     toast.error("Une erreur est survenue")
-        // }
+          })            
+            setErrors({})
+            toast.success("Vous êtes inscrit, vous pouvez vous connecter")
+            navigate("/login", {replace: true})
+        }catch({response})
+        {
+            const {violations} = response.data
+            if(violations){
+                violations.forEach(({propertyPath, message})=>{
+                    apiErrors[propertyPath] = message
+                })
+                setErrors(apiErrors)
+            }
+            toast.error("Une erreur est survenue")
+        }
     }
 
     const handleFileChange = (event) => {

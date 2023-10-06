@@ -2,27 +2,37 @@ import React, { useEffect, useState } from "react";
 import UserApi from "../services/UserApi";
 import { BASE_URL } from "../config";
 import { Link } from "react-router-dom";
+import AuthAPI from "../services/AuthAPI";
+import Axios from "axios";
 
 const UserPage = () => {
   const [user, setUser] = useState(null);
+  const token = window.localStorage.getItem("authToken");
 
   useEffect(() => {
-    // Appelez votre API pour récupérer les informations de l'utilisateur
-    UserApi.find()
-      .then((response) => {
-        // Accédez aux données de l'utilisateur dans la réponse
-        const userData = response["hydra:member"];
-        console.log(userData[0].company);
-        // Mettez à jour l'état de l'utilisateur avec les données
-        setUser(userData[0]);
-      })
-      .catch((error) => {
-        console.error(
-          "Erreur lors de la récupération des informations de l'utilisateur :",
-          error
-        );
-      });
-  }, []);
+    if (token) {
+      // Utilisez le token pour récupérer les informations de l'utilisateur
+      AuthAPI.getUserInfoByToken(token)
+        .then((userData) => {
+          // Accédez aux données de l'utilisateur dans la réponse
+          const userId = userData.id;
+          // Utilisez l'ID de l'utilisateur pour construire l'URL API
+          const userApiUrl = `${BASE_URL}api/users/${userId}`;
+          // Envoyez une requête GET à l'URL pour obtenir les informations de l'utilisateur spécifique
+          return Axios.get(userApiUrl);
+        })
+        .then((response) => {
+          // Mettez à jour l'état de l'utilisateur avec les données
+          setUser(response.data);
+        })
+        .catch((error) => {
+          console.error(
+            "Erreur lors de la récupération des informations de l'utilisateur :",
+            error
+          );
+        });
+    }
+  }, [token]);
 
   if (!user) {
     return <div>Chargement en cours...</div>;

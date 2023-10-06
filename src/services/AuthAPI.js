@@ -50,9 +50,25 @@ function setup()
         return false // pas de token
     }
 
+    function getUserInfoByToken(token) {
+        try {
+          // Décodage du token JWT pour obtenir les données de l'utilisateur
+          const userData = jwtDecode(token);
+          
+          // Vous pouvez maintenant utiliser userData pour obtenir des informations spécifiques de l'utilisateur
+          // userData contiendra les données du token telles que l'ID de l'utilisateur, le nom d'utilisateur, etc.
+      
+          return Promise.resolve(userData);
+        } catch (error) {
+          // En cas d'erreur lors du décodage du token
+          return Promise.reject(error);
+        }
+      }
+
     export default {
         authenticate: authenticate, 
         logout: logout,
         setup: setup,
-        isAuthenticated : isAuthenticated
+        isAuthenticated : isAuthenticated,
+        getUserInfoByToken: getUserInfoByToken
     }

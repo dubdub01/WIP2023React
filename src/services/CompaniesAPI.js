@@ -7,6 +7,24 @@ function findAll() {
   );
 }
 
+function find(id)
+{
+  return Axios.get(`${COMPANIES_API}/${id}`)
+              .then(response => response.data)
+}
+
+function deleteWorker(id){
+  return Axios.delete(`${COMPANIES_API}/${id}`)
+}
+
+async function getSector(id) {
+  const response = await Axios.get(`${COMPANIES_API}/${id}/sector`);
+  return response.data['hydra:member'];
+}
+
 export default {
   findAll: findAll,
+  find: find,
+  delete: deleteWorker,
+  getSector: getSector
 };
