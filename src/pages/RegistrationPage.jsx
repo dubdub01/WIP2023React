@@ -62,15 +62,21 @@ const RegisterPage = () => {
             navigate("/login", {replace: true})
         }catch({response})
         {
-            console.log(response)
             const {violations} = response.data
             if(violations){
-                violations.forEach(({propertyPath, message})=>{
+                const apiErrors = {}
+                violations.forEach(({propertyPath, message}) => {
                     apiErrors[propertyPath] = message
                 })
                 setErrors(apiErrors)
             }
-            toast.error("Une erreur est survenue")
+            toast.error("Des erreurs dans votre formulaire")
+            
+
+
+            console.log(response.data)
+            
+            
         }
     }
 
@@ -114,6 +120,7 @@ const RegisterPage = () => {
                 <div className="my-3">
                         <label htmlFor="image">Image: </label>
                         <input type="file" name="image" id="image" className='form-control' onChange={handleFileChange} />
+                        {errors.image && <p className="text-danger">{errors.image}</p>}
                     </div>
                 <div className="my-3">
                     <button type="submit" className="btn btn-success">Confirmation</button>
