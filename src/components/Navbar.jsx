@@ -5,15 +5,14 @@ import AuthContext from "../contexts/AuthContext";
 import { toast } from "react-toastify";
 
 const Navbar = (props) => {
-  const navigate = useNavigate()
-  const {isAuthenticated, setIsAuthenticated} = useContext(AuthContext)
+  const navigate = useNavigate();
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
 
   const handleLogout = () => {
     AuthAPI.logout();
-    setIsAuthenticated(false)
-    toast.info("Vous êtes désormais déconnecté")
+    setIsAuthenticated(false);
+    toast.info("Vous êtes désormais déconnecté");
     navigate("/login", { replace: true });
-
   };
 
   return (
@@ -55,6 +54,13 @@ const Navbar = (props) => {
                 Légal
               </NavLink>
             </li>
+            {isAuthenticated && (
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/newworker">
+                  Nouveau Worker
+                </NavLink>
+              </li>
+            )}
           </ul>
           <ul className="navbar-nav ms-auto">
             {!isAuthenticated ? (
@@ -72,18 +78,16 @@ const Navbar = (props) => {
               </>
             ) : (
               <div>
-
-              
-              <li className="nav-item">
-                <button className="btn btn-danger" onClick={handleLogout}>
-                  Déconnexion
-                </button>
-              </li>
-              <li>
-                <NavLink className="btn btn-success" to="/user">
-                  Mon compte
-                </NavLink>
-              </li>
+                <li className="nav-item">
+                  <button className="btn btn-danger" onClick={handleLogout}>
+                    Déconnexion
+                  </button>
+                </li>
+                <li>
+                  <NavLink className="btn btn-success" to="/user">
+                    Mon compte
+                  </NavLink>
+                </li>
               </div>
             )}
           </ul>

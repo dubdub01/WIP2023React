@@ -14,6 +14,7 @@ import RegistrationPage from "./pages/RegistrationPage";
 import UserPage from "./pages/UserPage";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css'
+import NewWorker from "./pages/NewWorker";
 
 
 AuthAPI.setup()
@@ -37,6 +38,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/workers" element={<WorkersPage />} />
+          <Route path="/newworker" element={<NewWorker />} />
           <Route path="/workers/:id" element={
               <WorkerPage />
           }/>

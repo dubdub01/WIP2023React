@@ -35,7 +35,9 @@ const RegisterPage = () => {
     const handleSubmit = async event => {
         event.preventDefault()
         const apiErrors = {}
+        
         try{
+            
             const formData = new FormData()
             formData.append("username", user.username)
             formData.append("eMail", user.eMail)
@@ -45,7 +47,7 @@ const RegisterPage = () => {
               headers: {
                 "Content-Type": "multipart/form-data",
               },
-            };
+            }
 
             await Axios({
               method: "post",
@@ -60,6 +62,7 @@ const RegisterPage = () => {
             navigate("/login", {replace: true})
         }catch({response})
         {
+            console.log(response)
             const {violations} = response.data
             if(violations){
                 violations.forEach(({propertyPath, message})=>{
@@ -76,7 +79,6 @@ const RegisterPage = () => {
       const myFile = event.currentTarget.files[0]
       console.log(myFile)
       setUser({...user, [name]:myFile})
-      console.log(user)
   }
 
     return (

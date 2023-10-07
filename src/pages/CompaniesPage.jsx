@@ -51,7 +51,6 @@ const CompaniesPage = (props) => {
   const isSectorMatch =
   selectedSector === "" || // Si aucun secteur n'est sélectionné, ne pas filtrer par secteur
   company.sector.some((sector) => sector.name === selectedSector);
-  console.log(company.sector)
 
 
     return isNameMatch && isSectorMatch;
