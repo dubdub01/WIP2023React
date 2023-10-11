@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { toast } from "react-toastify";
 import { WORKERS_API } from "../config";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css"
 
 const NewWorker = () => {
   const navigate = useNavigate();
@@ -14,7 +16,10 @@ const NewWorker = () => {
     age: "",
     gender: "",
     description: "",
-    visibility: "1",
+    visibility: "true",
+    cv: "NULL",
+    skills: ["1", "2"],
+    user: "/api/users/1",
   });
 
   const [errors, setErrors] = useState({
@@ -24,12 +29,18 @@ const NewWorker = () => {
     gender: "",
     description: "",
     visibility: "",
+    cv: "",
   });
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.currentTarget;
     // Utilisez "checked" pour gérer la valeur de "visibility" (case à cocher)
     setWorker({ ...worker, [name]: type === "checkbox" ? checked : value });
+  };
+
+  const handleDateChange = (date) => {
+    // Gérez le changement de date
+    setWorker({ ...worker, age: date });
   };
 
   const handleSubmit = async (event) => {
@@ -45,7 +56,7 @@ const NewWorker = () => {
     setErrors(apiErrors);
 
     try {
-      await Axios.post(WORKERS_API, worker);
+      await Axios.post("http://127.0.0.1:8000/api/worker/upload", worker);
       toast.success("Le travailleur a bien été enregistré");
       navigate("/workers");
     } catch ({ response }) {
@@ -80,15 +91,15 @@ const NewWorker = () => {
           onChange={handleChange}
           error={errors.lastName}
         />
-        <Field
-          type="date"
-          name={"Date de naissance"}
-          label={"Date de naissance"}
-          placeholder={"Date de naissance du travailleur"}
-          value={worker.age}
-          onChange={handleChange}
-          error={errors.age}
-        />
+        <div className="form-group">
+          <label>Date de naissance</label>
+          <DatePicker
+            selected={worker.age} // Utilisez la date dans l'état
+            onChange={handleDateChange} // Gérez le changement de date
+            dateFormat="yyyy-MM-dd" // Format de date souhaité
+          />
+          {errors.age && <div className="text-danger">{errors.age}</div>}
+        </div>
         <Field
           type="text"
           name={"gender"}
@@ -111,7 +122,7 @@ const NewWorker = () => {
           type="checkbox"
           name="visibility"
           label="Visibilité"
-          value={worker.visibility}
+          checked={worker.visibility} // Assurez-vous d'utiliser "checked" pour la case à cocher
           onChange={handleChange}
           error={errors.visibility}
         />
