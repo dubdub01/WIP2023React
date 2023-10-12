@@ -56,7 +56,9 @@ const WorkersPage = (props) => {
       selectedSkill === "" || // Si aucun skill n'est sélectionné, ne pas filtrer par skill
       worker.skills.some((skill) => skill.name === selectedSkill);
 
-    return isNameMatch && isSkillMatch;
+      const isVisible = worker.visibility === true;
+
+      return isNameMatch && isSkillMatch && isVisible;
   });
 
   const alertMessage = filteredWorkers.length === 0 && (

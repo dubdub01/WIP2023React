@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Field from "../components/forms/Field";
 import { Link, useNavigate } from "react-router-dom";
 import Axios from "axios";
@@ -6,31 +6,67 @@ import { toast } from "react-toastify";
 import { WORKERS_API } from "../config";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"
+import AuthAPI from "../services/AuthAPI";
+import { BASE_URL } from "../config";
 
 const NewWorker = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const token = window.localStorage.getItem("authToken");
+
+  useEffect(() => {
+    if (token) {
+      // Utilisez le token pour récupérer les informations de l'utilisateur
+      AuthAPI.getUserInfoByToken(token)
+        .then((userData) => {
+          // Accédez aux données de l'utilisateur dans la réponse
+          const userId = userData.id;
+          console.log(userData.id);
+
+          // Mettez à jour l'état de l'utilisateur avec les données
+          setUser(userData);
+        })
+        .catch((error) => {
+          console.error(
+            "Erreur lors de la récupération des informations de l'utilisateur :",
+            error
+          );
+        });
+    }
+  }, [token]);
+
 
   const [worker, setWorker] = useState({
-    firstName: "",
-    lastName: "",
+    firstname: "",
+    lastname: "",
     age: "",
     gender: "",
     description: "",
-    visibility: "true",
+    visibility: true,
     cv: "NULL",
-    skills: ["1", "2"],
-    user: "/api/users/1",
+    skills: ["/api/skills/581"],
+    user: "",
   });
 
   const [errors, setErrors] = useState({
-    firstName: "",
-    lastName: "",
+    firstname: "",
+    lastname: "",
     age: "",
     gender: "",
     description: "",
     visibility: "",
     cv: "",
   });
+
+  // Utilisez useEffect pour mettre à jour worker une fois que user est disponible
+  useEffect(() => {
+    if (user) {
+      setWorker((prevWorker) => ({
+        ...prevWorker,
+        user: `/api/users/${user.id}`,
+      }));
+    }
+  }, [user]);
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.currentTarget;
@@ -46,9 +82,9 @@ const NewWorker = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const apiErrors = {};
-    if (worker.firstName === "")
-      apiErrors.firstName = "Le prénom est obligatoire";
-    if (worker.lastName === "") apiErrors.lastName = "Le nom est obligatoire";
+    if (worker.firstname === "")
+      apiErrors.firstname = "Le prénom est obligatoire";
+    if (worker.lastname === "") apiErrors.lastname = "Le nom est obligatoire";
     if (worker.age === "") apiErrors.age = "L'âge est obligatoire";
     if (worker.gender === "") apiErrors.gender = "Le genre est obligatoire";
     if (worker.description === "")
@@ -56,11 +92,13 @@ const NewWorker = () => {
     setErrors(apiErrors);
 
     try {
-      await Axios.post("http://127.0.0.1:8000/api/worker/upload", worker);
+      console.log(worker);
+      await Axios.post("http://127.0.0.1:8000/api/workers",worker);
       toast.success("Le travailleur a bien été enregistré");
       navigate("/workers");
     } catch ({ response }) {
       const { violations } = response.data;
+      console.log(response);
       if (violations) {
         violations.forEach((propertyPath, message) => {
           apiErrors[propertyPath] = message;
@@ -76,30 +114,31 @@ const NewWorker = () => {
       <h1>créer un worker</h1>
       <form onSubmit={handleSubmit}>
         <Field
-          name={"firstName"}
+          name={"firstname"}
           label={"Prénom"}
           placeholder={"Prénom du travailleur"}
-          value={worker.firstName}
+          value={worker.firstname}
           onChange={handleChange}
-          error={errors.firstName}
+          error={errors.firstname}
         />
         <Field
-          name={"lastName"}
+          name={"lastname"}
           label={"Nom"}
           placeholder={"Nom du travailleur"}
-          value={worker.lastName}
+          value={worker.lastname}
           onChange={handleChange}
-          error={errors.lastName}
+          error={errors.lastname}
         />
-        <div className="form-group">
-          <label>Date de naissance</label>
-          <DatePicker
-            selected={worker.age} // Utilisez la date dans l'état
-            onChange={handleDateChange} // Gérez le changement de date
-            dateFormat="yyyy-MM-dd" // Format de date souhaité
-          />
-          {errors.age && <div className="text-danger">{errors.age}</div>}
-        </div>
+        <Field
+          type="date"
+          name={"age"}
+          label={"Date"}
+          placeholder={"Date du travailleur"}
+          value={worker.age}
+          onChange={handleChange}
+          error={errors.age}
+          dateFormat="yyyy/MM/dd"
+        />
         <Field
           type="text"
           name={"gender"}
