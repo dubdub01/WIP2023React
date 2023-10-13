@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import CompaniesAPI from "../services/CompaniesAPI";
 import { toast } from "react-toastify";
@@ -14,7 +14,7 @@ const CompanyPage = () => {
     name: "",
     e_mail: "",
     cover: "",
-    sector: [], // Nous stockerons les noms des compétences ici
+    sector: [],
   });
 
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -25,17 +25,12 @@ const CompanyPage = () => {
     }
   }, [id]);
 
-  const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-    return new Date(dateString).toLocaleDateString("fr-FR", options);
-  };
-
   const handleDelete = async () => {
     const originalCompany = { ...company };
 
     try {
       await CompaniesAPI.delete(company.id);
-      toast.success("La compagnie a bien été supprimé");
+      toast.success("La compagnie a bien été supprimée");
       navigate("/companies");
     } catch (error) {
       setCompany(originalCompany);
@@ -44,13 +39,10 @@ const CompanyPage = () => {
 
   const fetchCompany = async (id) => {
     try {
-      const workerData = await CompaniesAPI.find(id);
-
-      const formattedAge = formatDate(workerData.age);
+      const companyData = await CompaniesAPI.find(id);
 
       setCompany({
-        ...workerData,
-        age: formattedAge,
+        ...companyData,
       });
     } catch (error) {
       navigate("/companies", { replace: true });
@@ -61,30 +53,34 @@ const CompanyPage = () => {
     <div className="container py-5">
       <div className="card">
         <div className="card-body">
-          <h1 className="card-title">
-            {company.name} 
-          </h1>
+          <h1 className="card-title">{company.name}</h1>
           <div className="row">
             <div className="col-md-6">
-              <p> {company.e_mail} </p>
+              <p>{company.e_mail}</p>
             </div>
             <div className="col-md-6">
               <h5>Description:</h5>
-              <h5>Compétences:</h5>
+              <p>{company.description}</p>
+              <h5>Secteurs:</h5>
               <ul>
                 {company.sector.map((sector, index) => (
                   <li key={index}>{sector.name}</li>
                 ))}
               </ul>
-              <img src={`${BASE_URL}uploads/images/${company.cover}`} alt="" />
+              <img
+                src={`${BASE_URL}uploads/images/${company.cover}`}
+                alt={`Couverture de ${company.name}`}
+                className="img-fluid rounded"
+              />
 
-              <div>
-                {/* Afficher le bouton de suppression */}
-                <button onClick={() => setShowConfirmation(true)}>
+              <div className="mt-3">
+                <button
+                  className="btn btn-danger"
+                  onClick={() => setShowConfirmation(true)}
+                >
                   Supprimer
                 </button>
 
-                {/* Afficher la confirmation si showConfirmation est true */}
                 {showConfirmation && (
                   <DeleteConfirmation
                     onConfirm={handleDelete}

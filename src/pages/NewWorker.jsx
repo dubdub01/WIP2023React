@@ -110,26 +110,28 @@ const NewWorker = () => {
   };
 
   return (
-    <>
-      <h1>créer un worker</h1>
+<div className="container">
+      <h1 className="mb-4">Créer un travailleur</h1>
       <form onSubmit={handleSubmit}>
-        <Field
-          name={"firstname"}
-          label={"Prénom"}
-          placeholder={"Prénom du travailleur"}
-          value={worker.firstname}
-          onChange={handleChange}
-          error={errors.firstname}
-        />
-        <Field
-          name={"lastname"}
-          label={"Nom"}
-          placeholder={"Nom du travailleur"}
-          value={worker.lastname}
-          onChange={handleChange}
-          error={errors.lastname}
-        />
-        <Field
+        <div className="row">
+          <div className="col-md-6">
+            <Field
+              name="firstname"
+              label="Prénom"
+              placeholder="Prénom du travailleur"
+              value={worker.firstname}
+              onChange={handleChange}
+              error={errors.firstname}
+            />
+            <Field
+              name="lastname"
+              label="Nom"
+              placeholder="Nom du travailleur"
+              value={worker.lastname}
+              onChange={handleChange}
+              error={errors.lastname}
+            />
+            <Field
           type="date"
           name={"age"}
           label={"Date"}
@@ -137,34 +139,46 @@ const NewWorker = () => {
           value={worker.age}
           onChange={handleChange}
           error={errors.age}
-          dateFormat="yyyy/MM/dd"
         />
-        <Field
-          type="text"
-          name={"gender"}
-          label={"Genre"}
-          placeholder="Genre du travailleur"
-          value={worker.gender}
-          onChange={handleChange}
-          error={errors.age}
-        />
-        <Field
-          type="text"
-          name={"description"}
-          label={"Description"}
-          placeholder="Description du travailleur"
-          value={worker.description}
-          onChange={handleChange}
-          error={errors.description}
-        />
-        <Field
-          type="checkbox"
-          name="visibility"
-          label="Visibilité"
-          checked={worker.visibility} // Assurez-vous d'utiliser "checked" pour la case à cocher
-          onChange={handleChange}
-          error={errors.visibility}
-        />
+            <Field
+              name="gender"
+              label="Genre"
+              placeholder="Genre du travailleur"
+              value={worker.gender}
+              onChange={handleChange}
+              error={errors.gender}
+            />
+            <Field
+              name="description"
+              label="Description"
+              placeholder="Description du travailleur"
+              value={worker.description}
+              onChange={handleChange}
+              error={errors.description}
+            />
+          </div>
+          <div className="col-md-6">
+            <div className="form-group">
+              <label>Visibilité :</label>
+              <div className="custom-control custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="visibility"
+                  name="visibility"
+                  className="custom-control-input"
+                  checked={worker.visibility}
+                  onChange={handleChange}
+                />
+                <label
+                  className="custom-control-label"
+                  htmlFor="visibility"
+                >
+                  Visible
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="form-group">
           <button type="submit" className="btn btn-success">
             Enregistrer
@@ -174,7 +188,7 @@ const NewWorker = () => {
           </Link>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 

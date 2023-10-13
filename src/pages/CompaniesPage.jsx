@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Pagination from "../components/Pagination";
 import CompaniesAPI from "../services/CompaniesAPI";
 import { Link } from "react-router-dom";
@@ -13,16 +13,16 @@ const CompaniesPage = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    fetchCompanies()
+    fetchCompanies();
     fetchSectors();
-  }, [])
+  }, []);
 
   const fetchCompanies = async () => {
     try {
       const data = await CompaniesAPI.findAll();
       setCompanies(data);
     } catch (error) {
-      console.error("Erreur lors de la récupération des travailleurs:", error);
+      console.error("Erreur lors de la récupération des entreprises:", error);
     }
   };
 
@@ -31,7 +31,7 @@ const CompaniesPage = (props) => {
       const data = await SectorsAPI.findAll();
       setSectors(data);
     } catch (error) {
-      console.error("Erreur lors de la récupération des compétences:", error);
+      console.error("Erreur lors de la récupération des secteurs:", error);
     }
   };
 
@@ -41,17 +41,15 @@ const CompaniesPage = (props) => {
     setCurrentPage(1);
   };
 
-
-  const itemsPerPage = 9
+  const itemsPerPage = 9;
 
   const filteredCompanies = companies.filter((company) => {
     const isNameMatch =
-      company.name.toLowerCase().includes(search.toLowerCase())
+      company.name.toLowerCase().includes(search.toLowerCase());
 
-  const isSectorMatch =
-  selectedSector === "" || // Si aucun secteur n'est sélectionné, ne pas filtrer par secteur
-  company.sector.some((sector) => sector.name === selectedSector);
-
+    const isSectorMatch =
+      selectedSector === "" ||
+      company.sector.some((sector) => sector.name === selectedSector);
 
     return isNameMatch && isSectorMatch;
   });
@@ -69,75 +67,77 @@ const CompaniesPage = (props) => {
   );
 
   return (
-    <>
-      <div className="form-group">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Rechercher..."
-          value={search}
-          onChange={handleSearch}
-        />
+    <div className="container mt-4">
+      <h1 className="mb-4">Liste des Entreprises</h1>
+
+      <div className="row mb-3">
+        <div className="col-md-6">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Rechercher par nom"
+            value={search}
+            onChange={handleSearch}
+          />
+        </div>
+        <div className="col-md-6">
+          <select
+            className="form-control"
+            value={selectedSector}
+            onChange={(event) => setSelectedSector(event.currentTarget.value)}
+          >
+            <option value="">Tous les secteurs</option>
+            {sectors.map((sector) => (
+              <option key={sector.id} value={sector.name}>
+                {sector.name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      <div className="form-group">
-        <label htmlFor="sector">Secteur :</label>
-        <select
-          id="sector"
-          className="form-control"
-          value={selectedSector}
-          onChange={(event) => setSelectedSector(event.currentTarget.value)}
-        >
-          <option value="">Touts les secteurs</option>
-          {sectors.map((sector) => (
-            <option key={sector.id} value={sector.name}>
-              {sector.name}
-            </option>
-          ))}
-        </select>
-      </div>
+      {alertMessage}
 
-{alertMessage}
-
-
-      {paginatedCompanies.map((company) => (
-        <div class="row" key={company.id}>
-          <div class="col-md-4">
-            <div class="card bg-light mb-3">
-              <div class="card-header text-center">
-                <Link to={`/companies/${company.id}`}>{company.name}</Link>
-              </div>
-              <div class="card-body">
-                <div class="card-text">
-                  {company.sector.length}
-                  <div class="text-center mt-3">{company.description}</div>
-                  <img
-  src={`${BASE_URL}uploads/images/${company.cover}`}
-  alt="Couverture de l'entreprise"
-/>
-                  <div class="text-center mt-3">{company.cover}</div>
-                  <ul>
-                {company.sector.map((sector, index) => (
-                  <li key={index}>{sector.name}</li>
-                ))}
-              </ul>
-                  {company.provinceName.name}
-                </div>
+      <div className="row">
+        {paginatedCompanies.map((company) => (
+          <div className="col-md-4" key={company.id}>
+            <div className="card mb-4">
+              <img
+                src={`${BASE_URL}uploads/images/${company.cover}`}
+                alt={`Couverture de ${company.name}`}
+                className="card-img-top"
+              />
+              <div className="card-body">
+                <h5 className="card-title">
+                  <Link to={`/companies/${company.id}`}>{company.name}</Link>
+                </h5>
+                <p className="card-text">{company.description}</p>
+                <p className="card-text">
+                  <strong>Secteurs :</strong>
+                </p>
+                <ul className="list-unstyled">
+                  {company.sector.map((sector, index) => (
+                    <li key={index}>{sector.name}</li>
+                  ))}
+                </ul>
+                <p className="card-text">
+                  <strong>Province :</strong> {company.provinceName.name}
+                </p>
               </div>
             </div>
           </div>
-        </div>
-      ))}
-      
+        ))}
+      </div>
+
       {itemsPerPage < filteredCompanies.length && (
         <Pagination
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}
           length={filteredCompanies.length}
           onPageChanged={setCurrentPage}
-          />
-          )}
-    </>
+        />
+      )}
+    </div>
   );
 };
 

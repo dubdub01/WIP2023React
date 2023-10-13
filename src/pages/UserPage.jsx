@@ -11,18 +11,13 @@ const UserPage = () => {
 
   useEffect(() => {
     if (token) {
-      // Utilisez le token pour récupérer les informations de l'utilisateur
       AuthAPI.getUserInfoByToken(token)
         .then((userData) => {
-          // Accédez aux données de l'utilisateur dans la réponse
           const userId = userData.id;
-          // Utilisez l'ID de l'utilisateur pour construire l'URL API
           const userApiUrl = `${BASE_URL}api/users/${userId}`;
-          // Envoyez une requête GET à l'URL pour obtenir les informations de l'utilisateur spécifique
           return Axios.get(userApiUrl);
         })
         .then((response) => {
-          // Mettez à jour l'état de l'utilisateur avec les données
           setUser(response.data);
         })
         .catch((error) => {
@@ -39,60 +34,75 @@ const UserPage = () => {
   }
 
   return (
-    <div>
-      <h1>Informations de l'utilisateur</h1>
-      <p>Nom d'utilisateur : {user.username}</p>
-      <p>Adresse e-mail : {user.eMail}</p>
-      <p>cover : {user.image}</p>
-      <img
-        src={`${BASE_URL}uploads/images/${user.image}`}
-        alt="Couverture de l'utilisateur"
-      />
-      {/* Affichez d'autres informations de l'utilisateur ici */}
+    <div className="container">
+      <h1 className="mt-4">Informations de l'utilisateur</h1>
+      <div className="card mt-4">
+        <div className="card-body">
+          <h5 className="card-title">Nom d'utilisateur :</h5>
+          <p className="card-text">{user.username}</p>
+          <h5 className="card-title">Adresse e-mail :</h5>
+          <p className="card-text">{user.eMail}</p>
+          <h5 className="card-title">Cover :</h5>
+          <img
+            src={`${BASE_URL}uploads/images/${user.image}`}
+            alt="Couverture de l'utilisateur"
+            className="img-fluid"
+          />
+          {/* Affichez d'autres informations de l'utilisateur ici */}
+        </div>
+      </div>
 
-      <h2>Entreprises</h2>
-      <ul>
-        {user.company.map((company, index) => (
-          <div key={index}>
-            <p>
-              {company.name}
-              <br />
-              {company.description}
-              <br />
-              {company.sector.map((sector, index) => (
-                <li key={index}>{sector.name}</li>
-              ))}
-              <br />
+      <h2 className="mt-4">Entreprises</h2>
+      {user.company.length > 0 ? (
+        user.company.map((company, index) => (
+          <div className="card mt-4" key={index}>
+            <div className="card-body">
+              <h5 className="card-title">{company.name}</h5>
+              <p className="card-text">{company.description}</p>
+              <h6 className="card-subtitle mb-2 text-muted">Secteurs :</h6>
+              <ul>
+                {company.sector.map((sector, index) => (
+                  <li key={index}>{sector.name}</li>
+                ))}
+              </ul>
               <img
                 src={`${BASE_URL}uploads/images/${company.cover}`}
-                alt="Couverture de l'utilisateur"
+                alt="Couverture de l'entreprise"
+                className="img-fluid"
               />
-              <br />
-              {company.provinceName.name}
-            </p>
+              <p className="card-text">
+                Province : {company.provinceName.name}
+              </p>
+            </div>
           </div>
-        ))}
-      </ul>
+        ))
+      ) : (
+        <p>Aucune entreprise associée.</p>
+      )}
 
-      <h2>Travailleurs associés</h2>
-      <ul>
-        {user.workers.map((worker, index) => (
-          <div key={index}>
-            <p>{worker.firstname}</p>
-            <p>{worker.lastname}</p>
-            <p>{worker.age}</p>
-            <p>{worker.gender}</p>
-            <p>{worker.description}</p>
-
-            <Link
-              className="btn btn-primary mx-2 d-block"
-              to={`${BASE_URL}uploads/cv/${worker.cv}`}
-            >
-              cv de {worker.firstname} {worker.lastname}
-            </Link>
+      <h2 className="mt-4">Travailleurs associés</h2>
+      {user.workers.length > 0 ? (
+        user.workers.map((worker, index) => (
+          <div className="card mt-4" key={index}>
+            <div className="card-body">
+              <h5 className="card-title">
+                {worker.firstname} {worker.lastname}
+              </h5>
+              <p className="card-text">Date de naissance : {worker.age}</p>
+              <p className="card-text">Genre : {worker.gender}</p>
+              <p className="card-text">Description : {worker.description}</p>
+              <Link
+                className="btn btn-primary mx-2 d-block"
+                to={`${BASE_URL}uploads/cv/${worker.cv}`}
+              >
+                CV de {worker.firstname} {worker.lastname}
+              </Link>
+            </div>
           </div>
-        ))}
-      </ul>
+        ))
+      ) : (
+        <p>Aucun travailleur associé.</p>
+      )}
     </div>
   );
 };

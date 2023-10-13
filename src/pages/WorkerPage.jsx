@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import WorkersAPI from "../services/WorkersAPI";
 import { toast } from "react-toastify";
@@ -16,7 +16,7 @@ const WorkerPage = () => {
     gender: "",
     age: "",
     description: "",
-    skills: [], // Nous stockerons les noms des compétences ici
+    skills: [],
   });
 
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -82,17 +82,21 @@ const WorkerPage = () => {
                   <li key={index}>{skill.name}</li>
                 ))}
               </ul>
-              <Link className="btn btn-primary mx-2 d-block" to={`${BASE_URL}uploads/cv/${worker.cv}`}>
-                  cv de {worker.firstname} {worker.lastname}
-                </Link>
+              <Link
+                className="btn btn-primary mx-2 d-block"
+                to={`${BASE_URL}uploads/cv/${worker.cv}`}
+              >
+                CV de {worker.firstname} {worker.lastname}
+              </Link>
 
-              <div>
-                {/* Afficher le bouton de suppression */}
-                <button onClick={() => setShowConfirmation(true)}>
+              <div className="mt-3">
+                <button
+                  className="btn btn-danger"
+                  onClick={() => setShowConfirmation(true)}
+                >
                   Supprimer
                 </button>
 
-                {/* Afficher la confirmation si showConfirmation est true */}
                 {showConfirmation && (
                   <DeleteConfirmation
                     onConfirm={handleDelete}
