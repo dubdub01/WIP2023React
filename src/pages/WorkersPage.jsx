@@ -10,6 +10,8 @@ const WorkersPage = () => {
   const [search, setSearch] = useState("");
   const [skills, setSkills] = useState([]);
   const [selectedSkill, setSelectedSkill] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  let content;
 
   useEffect(() => {
     fetchWorkers();
@@ -61,11 +63,21 @@ const WorkersPage = () => {
     return isNameMatch && isSkillMatch && isVisible;
   });
 
-  const alertMessage = filteredWorkers.length === 0 && (
-    <div className="alert alert-info" role="alert">
-      Aucun travailleur ne correspond à votre filtre.
-    </div>
-  );
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await WorkersAPI.findAll();
+        setWorkers(data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error(
+          "Erreur lors de la récupération des travailleurs:",
+          error
+        );
+      }
+    };
+    fetchData();
+  }, []);
 
   const paginatedWorkers = Pagination.getData(
     filteredWorkers,
@@ -73,67 +85,99 @@ const WorkersPage = () => {
     itemsPerPage
   );
 
-  return (
-    <div className="container mt-4">
-      <h1 className="mb-4">Liste des Travailleurs</h1>
-
-      <div className="row mb-3">
-        <div className="col-md-6">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Rechercher par nom"
-            value={search}
-            onChange={handleSearch}
-          />
-        </div>
-        <div className="col-md-6">
-          <select
-            className="form-control"
-            value={selectedSkill}
-            onChange={(event) => setSelectedSkill(event.currentTarget.value)}
-          >
-            <option value="">Toutes les compétences</option>
-            {skills.map((skill) => (
-              <option key={skill.id} value={skill.name}>
-                {skill.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      {alertMessage}
-
-      <div className="row">
-        {paginatedWorkers.map((worker) => (
-          <div className="col-md-4" key={worker.id}>
-            <div className="card mb-4">
-              <div className="card-body">
-                <h5 className="card-title">
-                  <Link to={`/workers/${worker.id}`}>
-                    {worker.firstname} {worker.lastname}
-                  </Link>
-                </h5>
-                <p className="card-text">
-                  <strong>Genre:</strong> {worker.gender}
-                </p>
-                <p className="card-text">
-                  <strong>Date de naissance:</strong> {formatDate(worker.age)}
-                </p>
-                <p className="card-text">
-                  <strong>Compétences:</strong>
-                </p>
-                <ul className="list-unstyled">
-                  {worker.skills.map((skill, index) => (
-                    <li key={index}>{skill.name}</li>
-                  ))}
-                </ul>
+  if (isLoading) {
+    content = (
+      <div className="alert alert-info" role="alert">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+          {Array.from({ length: 9 }).map((_, index) => (
+            <div class="block bg-white border rounded-md p-4 shadow-md mb-4 hover:scale-105 transform transition-transform duration-300">
+              <div class="animate-pulse flex space-x-4">
+                <div class="flex-1 space-y-6 py-1">
+                  <div class="h-2 bg-slate-700 rounded"></div>
+                  <div class="space-y-3">
+                    <div class="h-2 bg-slate-700 rounded"></div>
+                  </div>
+                  <div class="h-2 bg-slate-700 rounded"></div>
+                  <div class="h-2 bg-slate-700 rounded"></div>
+                </div>
               </div>
             </div>
-          </div>
+          ))}
+        </div>
+      </div>
+    );
+  } else if (filteredWorkers.length === 0) {
+    content = (
+      <div className="text-gray-600 text-center">
+        Aucun travailleur ne correspond à votre recherche...
+      </div>
+    );
+  } else {
+    content = (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+        {paginatedWorkers.map((worker) => (
+          <Link
+            to={`/workers/${worker.id}`}
+            className="block bg-white border rounded-md p-4 shadow-md mb-4 hover:scale-105 transform transition-transform duration-300"
+            key={worker.id}
+          >
+            <h5 className="text-xl font-semibold">
+              {worker.firstname} {worker.lastname}
+            </h5>
+            <p className="text-gray-600">
+              <strong>Genre:</strong> {worker.gender}
+            </p>
+            <p className="text-gray-600">
+              <strong>Date de naissance:</strong> {formatDate(worker.age)}
+            </p>
+            <p className="text-gray-600">
+              <strong>Compétences:</strong>
+            </p>
+            <ul className="list-disc list-inside text-gray-600">
+              {worker.skills.map((skill, index) => (
+                <li key={index}>{skill.name}</li>
+              ))}
+            </ul>
+          </Link>
         ))}
       </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-semibold mb-4">Liste des Travailleurs</h1>
+      {/* Afficher le message de chargement initial si isLoading est vrai */}
+      
+        <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mb-4">
+          <div className="flex-grow">
+            <input
+              type="text"
+              className="border rounded-md p-2 w-full"
+              placeholder="Rechercher par nom"
+              value={search}
+              onChange={handleSearch}
+            />
+          </div>
+          <div className="flex-grow">
+            <select
+              className="border rounded-md p-2 w-full"
+              value={selectedSkill}
+              onChange={(event) => setSelectedSkill(event.currentTarget.value)}
+            >
+              <option value="">Toutes les compétences</option>
+              {skills.map((skill) => (
+                <option key={skill.id} value={skill.name}>
+                  {skill.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      
+      {content}
+
+      
 
       {itemsPerPage < filteredWorkers.length && (
         <Pagination

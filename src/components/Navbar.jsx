@@ -16,84 +16,104 @@ const Navbar = (props) => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-      <div className="container-fluid">
-        <NavLink className="navbar-brand" to="/">
-          API-Platform React
+    <nav className="bg-gradient-to-r from-slate-950 to-slate-600">
+    <div className="container mx-auto">
+      <div className="flex items-center justify-between py-4">
+        <NavLink className="text-white text-2xl font-semibold" to="/">
+          WIP
         </NavLink>
         <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+          className="lg:hidden block text-white text-xl focus:outline-none"
+          // onClick={() => setIsOpen(!isOpen)}
         >
-          <span className="navbar-toggler-icon"></span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
         </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav me-auto">
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/">
-                Accueil
+        <div className="lg:flex lg:items-center lg:justify-center space-x-4">
+          <NavLink
+            className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+            to="/"
+          >
+            Accueil
+          </NavLink>
+          <NavLink
+            className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+            to="/workers"
+          >
+            Worker
+          </NavLink>
+          <NavLink
+            className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+            to="/companies"
+          >
+            Companies
+          </NavLink>
+          <NavLink
+            className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+            to="/legal"
+          >
+            Légal
+          </NavLink>
+          {isAuthenticated && (
+            <NavLink
+              className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+              to="/newworker"
+            >
+              Nouveau Worker
+            </NavLink>
+          )}
+        </div>
+  
+        <div className="lg:flex space-x-4">
+          {!isAuthenticated ? (
+            <div className="lg:flex lg:flex-col space-y-2">
+              <NavLink
+                className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                to="/registration"
+              >
+                Inscription
               </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/workers">
-                Worker
+              <NavLink
+                className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                to="/login"
+              >
+                Connexion
               </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/companies">
-                Companies
+            </div>
+          ) : (
+            <div className="space-x-4">
+              <button
+                className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                onClick={handleLogout}
+              >
+                Déconnexion
+              </button>
+              <NavLink
+                className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                to="/user"
+              >
+                Mon compte
               </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/legal">
-                Légal
-              </NavLink>
-            </li>
-            {isAuthenticated && (
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/newworker">
-                  Nouveau Worker
-                </NavLink>
-              </li>
-            )}
-          </ul>
-          <ul className="navbar-nav ms-auto">
-            {!isAuthenticated ? (
-              <>
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/registration">
-                    Inscription
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink className="btn btn-success" to="/login">
-                    Connexion
-                  </NavLink>
-                </li>
-              </>
-            ) : (
-              <div>
-                <li className="nav-item">
-                  <button className="btn btn-danger" onClick={handleLogout}>
-                    Déconnexion
-                  </button>
-                </li>
-                <li>
-                  <NavLink className="btn btn-success" to="/user">
-                    Mon compte
-                  </NavLink>
-                </li>
-              </div>
-            )}
-          </ul>
+            </div>
+          )}
         </div>
       </div>
-    </nav>
+    </div>
+  </nav>
+  
+
   );
 };
 

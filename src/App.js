@@ -34,7 +34,6 @@ const App = () => {
 
     <Router>
       <Navbar />
-      <main className="container pt-5">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/workers" element={<WorkersPage />} />
@@ -51,7 +50,6 @@ const App = () => {
           <Route path="/registration" element={<RegistrationPage />} />
           <Route path="/user" element={<UserPage />} />
         </Routes>
-      </main>
     </Router>
     <ToastContainer position={toast.POSITION.BOTTOM_LEFT} />
     </AuthContext.Provider>
