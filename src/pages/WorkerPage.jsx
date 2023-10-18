@@ -61,54 +61,54 @@ const WorkerPage = () => {
 
   return (
     <div className="container py-5">
-      <div className="card">
-        <div className="card-body">
-          <h1 className="card-title">
-            {worker.firstname} {worker.lastname}
-          </h1>
-          <div className="row">
-            <div className="col-md-6">
-              <h5>Genre:</h5>
-              <p>{worker.gender}</p>
-              <h5>Date de naissance:</h5>
-              <p>{worker.age}</p>
-            </div>
-            <div className="col-md-6">
-              <h5>Description:</h5>
-              <p>{worker.description}</p>
-              <h5>Compétences:</h5>
-              <ul>
-                {worker.skills.map((skill, index) => (
-                  <li key={index}>{skill.name}</li>
-                ))}
-              </ul>
-              <Link
-                className="btn btn-primary mx-2 d-block"
-                to={`${BASE_URL}uploads/cv/${worker.cv}`}
-              >
-                CV de {worker.firstname} {worker.lastname}
-              </Link>
+  <div className="bg-white shadow-md rounded-lg p-6">
+    <h1 className="text-3xl font-semibold mb-4">
+      {worker.firstname} {worker.lastname}
+    </h1>
+    <div className="flex flex-wrap">
+      <div className="w-full md:w-1/2">
+        <h5 className="font-semibold">Genre:</h5>
+        <p>{worker.gender}</p>
+        <h5 className="font-semibold mt-2">Date de naissance:</h5>
+        <p>{worker.age}</p>
+      </div>
+      <div className="w-full md:w-1/2">
+        <h5 className="font-semibold">Description:</h5>
+        <p>{worker.description}</p>
+        <h5 className="font-semibold mt-2">Compétences:</h5>
+        <ul className="list-disc pl-4">
+          {worker.skills.map((skill, index) => (
+            <li key={index}>{skill.name}</li>
+          ))}
+        </ul>
+        <Link
+          href={`${BASE_URL}uploads/cv/${worker.cv}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block mt-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
+        >
+          CV de {worker.firstname} {worker.lastname}
+        </Link>
+        <div className="mt-3">
+          <button
+            className="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300"
+            onClick={() => setShowConfirmation(true)}
+          >
+            Supprimer
+          </button>
 
-              <div className="mt-3">
-                <button
-                  className="btn btn-danger"
-                  onClick={() => setShowConfirmation(true)}
-                >
-                  Supprimer
-                </button>
-
-                {showConfirmation && (
-                  <DeleteConfirmation
-                    onConfirm={handleDelete}
-                    onCancel={() => setShowConfirmation(false)}
-                  />
-                )}
-              </div>
-            </div>
-          </div>
+          {showConfirmation && (
+            <DeleteConfirmation
+              onConfirm={handleDelete}
+              onCancel={() => setShowConfirmation(false)}
+            />
+          )}
         </div>
       </div>
     </div>
+  </div>
+</div>
+
   );
 };
 

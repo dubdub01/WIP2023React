@@ -5,14 +5,25 @@ import Axios from "axios";
 import { toast } from "react-toastify";
 import { WORKERS_API } from "../config";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css"
+import "react-datepicker/dist/react-datepicker.css";
 import AuthAPI from "../services/AuthAPI";
 import { BASE_URL } from "../config";
+import SkillsAPI from "../services/SkillsAPI";
 
 const NewWorker = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const token = window.localStorage.getItem("authToken");
+  const [skills, setSkills] = useState([]);
+  const [selectedSkills, setSelectedSkills] = useState("");
+  const [newSkills, setNewSkills] = useState([""]);
+  const [individualSelectedSkills, setIndividualSelectedSkills] = useState(
+    newSkills.map(() => [])
+  );
+
+  useEffect(() => {
+    fetchSkills();
+  }, []);
 
   useEffect(() => {
     if (token) {
@@ -35,7 +46,6 @@ const NewWorker = () => {
     }
   }, [token]);
 
-
   const [worker, setWorker] = useState({
     firstname: "",
     lastname: "",
@@ -44,7 +54,7 @@ const NewWorker = () => {
     description: "",
     visibility: true,
     cv: "NULL",
-    skills: ["/api/skills/581"],
+    skills: [""],
     user: "",
   });
 
@@ -57,6 +67,15 @@ const NewWorker = () => {
     visibility: "",
     cv: "",
   });
+
+  const fetchSkills = async () => {
+    try {
+      const data = await SkillsAPI.findAll();
+      setSkills(data);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des compétences:", error);
+    }
+  };
 
   // Utilisez useEffect pour mettre à jour worker une fois que user est disponible
   useEffect(() => {
@@ -79,6 +98,30 @@ const NewWorker = () => {
     setWorker({ ...worker, age: date });
   };
 
+  const handleSkillsChange = (event, index) => {
+    const { options } = event.target;
+    const selectedSkills = Array.from(options)
+      .filter((option) => option.selected)
+      .map((option) => option.value);
+
+    // Utilisez l'index pour mettre à jour la sélection de compétences individuelle
+    const updatedIndividualSelectedSkills = [...individualSelectedSkills];
+    updatedIndividualSelectedSkills[index] = selectedSkills;
+    setIndividualSelectedSkills(updatedIndividualSelectedSkills);
+  };
+
+  const handleAddSkill = () => {
+    setNewSkills([...newSkills, ""]);
+    // Ajoutez un nouvel élément vide à la sélection de compétences individuelle
+    setIndividualSelectedSkills([...individualSelectedSkills, []]);
+  };
+
+  const handleNewSkillChange = (index, value) => {
+    const updatedSkills = [...newSkills];
+    updatedSkills[index] = value;
+    setNewSkills(updatedSkills);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const apiErrors = {};
@@ -89,11 +132,12 @@ const NewWorker = () => {
     if (worker.gender === "") apiErrors.gender = "Le genre est obligatoire";
     if (worker.description === "")
       apiErrors.description = "La description est obligatoire";
+    if (selectedSkills.length === 0)
+      apiErrors.skills = "Les compétences sont obligatoires";
     setErrors(apiErrors);
-
     try {
       console.log(worker);
-      await Axios.post("http://127.0.0.1:8000/api/workers",worker);
+      await Axios.post("http://127.0.0.1:8000/api/workers", worker);
       toast.success("Le travailleur a bien été enregistré");
       navigate("/workers");
     } catch ({ response }) {
@@ -110,11 +154,14 @@ const NewWorker = () => {
   };
 
   return (
-<div className="container">
-      <h1 className="mb-4">Créer un travailleur</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="row">
-          <div className="col-md-6">
+    <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-semibold mb-4">Créer un travailleur</h1>
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+      >
+        <div className="md:flex md:items-center mb-6">
+          <div className="md:w-1/2 px-3 mb-6 md:mb-0">
             <Field
               name="firstname"
               label="Prénom"
@@ -123,6 +170,8 @@ const NewWorker = () => {
               onChange={handleChange}
               error={errors.firstname}
             />
+          </div>
+          <div className="md:w-1/2 px-3">
             <Field
               name="lastname"
               label="Nom"
@@ -131,15 +180,21 @@ const NewWorker = () => {
               onChange={handleChange}
               error={errors.lastname}
             />
+          </div>
+        </div>
+        <div className="md:flex md:items-center mb-6">
+          <div className="md:w-1/2 px-3 mb-6 md:mb-0">
             <Field
-          type="date"
-          name={"age"}
-          label={"Date"}
-          placeholder={"Date du travailleur"}
-          value={worker.age}
-          onChange={handleChange}
-          error={errors.age}
-        />
+              type="date"
+              name={"age"}
+              label={"Date"}
+              placeholder={"Date du travailleur"}
+              value={worker.age}
+              onChange={handleChange}
+              error={errors.age}
+            />
+          </div>
+          <div className="md:w-1/2 px-3">
             <Field
               name="gender"
               label="Genre"
@@ -148,42 +203,82 @@ const NewWorker = () => {
               onChange={handleChange}
               error={errors.gender}
             />
-            <Field
-              name="description"
-              label="Description"
-              placeholder="Description du travailleur"
-              value={worker.description}
-              onChange={handleChange}
-              error={errors.description}
-            />
-          </div>
-          <div className="col-md-6">
-            <div className="form-group">
-              <label>Visibilité :</label>
-              <div className="custom-control custom-checkbox">
-                <input
-                  type="checkbox"
-                  id="visibility"
-                  name="visibility"
-                  className="custom-control-input"
-                  checked={worker.visibility}
-                  onChange={handleChange}
-                />
-                <label
-                  className="custom-control-label"
-                  htmlFor="visibility"
-                >
-                  Visible
-                </label>
-              </div>
-            </div>
           </div>
         </div>
-        <div className="form-group">
-          <button type="submit" className="btn btn-success">
+        <div className="mb-6">
+          <Field
+            name="description"
+            label="Description"
+            placeholder="Description du travailleur"
+            value={worker.description}
+            onChange={handleChange}
+            error={errors.description}
+          />
+        </div>
+        
+        
+
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Compétences :
+          </label>
+          {newSkills.map((newSkill, index) => (
+            <div className="input-group mb-3" key={index}>
+              <select 
+                multiple
+                className="form-multiselect block w-full px-4 py-2 mt-2 bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:border-indigo-500 sm:text-sm"
+                name="skills"
+                onChange={(event) => handleSkillsChange(event, index)}
+                value={individualSelectedSkills[index]}
+                error={errors.skills}
+                data-te-select-init data-te-select-filter="true"
+              >
+                {skills.map((skill) => (
+                  <option key={skill.id} value={skill.id}>
+                    {skill.name}
+                  </option>
+                ))}
+              </select>
+              <div className="input-group-append">
+                <button
+                  className="btn btn-primary"
+                  type="button"
+                  onClick={handleAddSkill}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Visibilité :
+          </label>
+          <div className="custom-control custom-checkbox">
+            <input
+              type="checkbox"
+              name="visibility"
+              className="custom-control-input"
+              checked={worker.visibility}
+              onChange={handleChange}
+            />
+            <label className="custom-control-label" htmlFor="visibility">
+              Visible
+            </label>
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <button
+            type="submit"
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
             Enregistrer
           </button>
-          <Link to="/workers" className="btn btn-link">
+          <Link
+            to="/workers"
+            className="text-gray-500 font-bold hover:text-gray-700"
+          >
             Retour à la liste
           </Link>
         </div>

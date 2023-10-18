@@ -2,7 +2,7 @@ const Legal = (props) => {
     return (
         <>
 
-<div class="container">
+<div className="container">
 
 	<h2>Définitions</h2>
 	{/* <p>
