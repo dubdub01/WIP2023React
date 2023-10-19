@@ -9,6 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import AuthAPI from "../services/AuthAPI";
 import { BASE_URL } from "../config";
 import SkillsAPI from "../services/SkillsAPI";
+import Select from "react-select";
 
 const NewWorker = () => {
   const navigate = useNavigate();
@@ -68,6 +69,11 @@ const NewWorker = () => {
     cv: "",
   });
 
+  const options = [
+    { value: "chocolate", label: "Chocolate" },
+    { value: "strawberry", label: "Strawberry" },
+    { value: "vanilla", label: "Vanilla" },
+  ];
   const fetchSkills = async () => {
     try {
       const data = await SkillsAPI.findAll();
@@ -98,28 +104,9 @@ const NewWorker = () => {
     setWorker({ ...worker, age: date });
   };
 
-  const handleSkillsChange = (event, index) => {
-    const { options } = event.target;
-    const selectedSkills = Array.from(options)
-      .filter((option) => option.selected)
-      .map((option) => option.value);
-
-    // Utilisez l'index pour mettre à jour la sélection de compétences individuelle
-    const updatedIndividualSelectedSkills = [...individualSelectedSkills];
-    updatedIndividualSelectedSkills[index] = selectedSkills;
-    setIndividualSelectedSkills(updatedIndividualSelectedSkills);
-  };
-
-  const handleAddSkill = () => {
-    setNewSkills([...newSkills, ""]);
-    // Ajoutez un nouvel élément vide à la sélection de compétences individuelle
-    setIndividualSelectedSkills([...individualSelectedSkills, []]);
-  };
-
-  const handleNewSkillChange = (index, value) => {
-    const updatedSkills = [...newSkills];
-    updatedSkills[index] = value;
-    setNewSkills(updatedSkills);
+  const handleSkillChange = (selectedOptions) => {
+    const selectedSkills = selectedOptions.map((option) => `/api/skills/${option.value}`);
+    setWorker({ ...worker, skills: selectedSkills });
   };
 
   const handleSubmit = async (event) => {
@@ -217,41 +204,26 @@ const NewWorker = () => {
         </div>
 
         <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Compétences :
-          </label>
-          {newSkills.map((newSkill, index) => (
-            <div className="input-group mb-3" key={index}>
-              <select
-                multiple
-                className="form-multiselect block w-full px-4 py-2 mt-2 bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:border-indigo-500 sm:text-sm"
-                name="skills"
-                onChange={(event) => handleSkillsChange(event, index)}
-                value={individualSelectedSkills[index]}
-                error={errors.skills}
-                data-te-select-init
-                data-te-select-filter="true"
-              >
-                {skills.map((skill) => (
-                  <option key={skill.id} value={skill.id}>
-                    {skill.name}
-                  </option>
-                ))}
-              </select>
-              <div className="input-group-append">
-                <button
-                  className="btn btn-primary"
-                  type="button"
-                  onClick={handleAddSkill}
-                >
-                  +
-                </button>
-              </div>
-            </div>
-          ))}
+      <label className="block text-gray-700 mb-2">Compétences :</label>
+      {newSkills.map((newSkill, index) => (
+        <div className="input-group mb-3" key={index}>
+          <Select
+            isMulti
+            name="skills"
+            options={skills.map((skill) => ({
+              value: skill.id,
+              label: skill.name,
+            }))}
+            
+            onChange={handleSkillChange}
+            className="basic-multi-select"
+            classNamePrefix="select"
+          />
         </div>
+      ))}
+    </div>
         <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
+          <label className="block text-gray-700 mb-2">
             Visibilité :
           </label>
           <div className="flex items-center">
