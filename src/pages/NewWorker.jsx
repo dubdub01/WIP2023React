@@ -215,8 +215,6 @@ const NewWorker = () => {
             error={errors.description}
           />
         </div>
-        
-        
 
         <div className="mb-6">
           <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -224,14 +222,15 @@ const NewWorker = () => {
           </label>
           {newSkills.map((newSkill, index) => (
             <div className="input-group mb-3" key={index}>
-              <select 
+              <select
                 multiple
                 className="form-multiselect block w-full px-4 py-2 mt-2 bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:border-indigo-500 sm:text-sm"
                 name="skills"
                 onChange={(event) => handleSkillsChange(event, index)}
                 value={individualSelectedSkills[index]}
                 error={errors.skills}
-                data-te-select-init data-te-select-filter="true"
+                data-te-select-init
+                data-te-select-filter="true"
               >
                 {skills.map((skill) => (
                   <option key={skill.id} value={skill.id}>
@@ -255,19 +254,18 @@ const NewWorker = () => {
           <label className="block text-gray-700 text-sm font-bold mb-2">
             Visibilité :
           </label>
-          <div className="custom-control custom-checkbox">
+          <div className="flex items-center">
             <input
               type="checkbox"
               name="visibility"
-              className="custom-control-input"
+              className="form-checkbox text-indigo-600 h-5 w-5"
               checked={worker.visibility}
               onChange={handleChange}
             />
-            <label className="custom-control-label" htmlFor="visibility">
-              Visible
-            </label>
+            <label className="ml-2 text-gray-700">Visible</label>
           </div>
         </div>
+
         <div className="flex items-center justify-between">
           <button
             type="submit"

@@ -51,43 +51,41 @@ const CompanyPage = () => {
 
   return (
     <div className="container py-5">
-      <div className="card">
-        <div className="card-body">
-          <h1 className="card-title">{company.name}</h1>
-          <div className="row">
-            <div className="col-md-6">
-              <p>{company.e_mail}</p>
-            </div>
-            <div className="col-md-6">
-              <h5>Description:</h5>
-              <p>{company.description}</p>
-              <h5>Secteurs:</h5>
-              <ul>
-                {company.sector.map((sector, index) => (
-                  <li key={index}>{sector.name}</li>
-                ))}
-              </ul>
-              <img
-                src={`${BASE_URL}uploads/images/${company.cover}`}
-                alt={`Couverture de ${company.name}`}
-                className="img-fluid rounded"
-              />
+      <div className="bg-white shadow-md rounded-md p-6">
+        <h1 className="text-3xl font-semibold mb-4">{company.name}</h1>
+        <div className="flex flex-wrap">
+          <div className="w-full md:w-1/2">
+            <p className="mb-4">{company.e_mail}</p>
+          </div>
+          <div className="w-full md:w-1/2">
+            <h5 className="text-lg font-semibold mb-2">Description :</h5>
+            <p className="mb-4">{company.description}</p>
+            <h5 className="text-lg font-semibold mb-2">Secteurs :</h5>
+            <ul className="list-disc list-inside mb-4">
+              {company.sector.map((sector, index) => (
+                <li key={index}>{sector.name}</li>
+              ))}
+            </ul>
+            <img
+              src={`${BASE_URL}uploads/images/${company.cover}`}
+              alt={`Couverture de ${company.name}`}
+              className="w-full rounded"
+            />
 
-              <div className="mt-3">
-                <button
-                  className="btn btn-danger"
-                  onClick={() => setShowConfirmation(true)}
-                >
-                  Supprimer
-                </button>
+            <div className="mt-6">
+              <button
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition duration-300"
+                onClick={() => setShowConfirmation(true)}
+              >
+                Supprimer
+              </button>
 
-                {showConfirmation && (
-                  <DeleteConfirmation
-                    onConfirm={handleDelete}
-                    onCancel={() => setShowConfirmation(false)}
-                  />
-                )}
-              </div>
+              {showConfirmation && (
+                <DeleteConfirmation
+                  onConfirm={handleDelete}
+                  onCancel={() => setShowConfirmation(false)}
+                />
+              )}
             </div>
           </div>
         </div>
