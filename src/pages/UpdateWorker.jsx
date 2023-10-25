@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Field from "../components/forms/Field";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { toast } from "react-toastify";
 import { WORKERS_API } from "../config";
@@ -11,41 +11,15 @@ import { BASE_URL } from "../config";
 import SkillsAPI from "../services/SkillsAPI";
 import Select from "react-select";
 
-const NewWorker = () => {
+const UpdateWorker = () => {
   const navigate = useNavigate();
+  const { id } = useParams(); // Obtenez l'ID du travailleur depuis l'URL
   const [user, setUser] = useState(null);
   const token = window.localStorage.getItem("authToken");
   const [skills, setSkills] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState("");
   const [newSkills, setNewSkills] = useState([""]);
-  const [individualSelectedSkills, setIndividualSelectedSkills] = useState(
-    newSkills.map(() => [])
-  );
-
-  useEffect(() => {
-    fetchSkills();
-  }, []);
-
-  useEffect(() => {
-    if (token) {
-      // Utilisez le token pour récupérer les informations de l'utilisateur
-      AuthAPI.getUserInfoByToken(token)
-        .then((userData) => {
-          // Accédez aux données de l'utilisateur dans la réponse
-          const userId = userData.id;
-          console.log(userData.id);
-
-          // Mettez à jour l'état de l'utilisateur avec les données
-          setUser(userData);
-        })
-        .catch((error) => {
-          console.error(
-            "Erreur lors de la récupération des informations de l'utilisateur :",
-            error
-          );
-        });
-    }
-  }, [token]);
+  const [individualSelectedSkills, setIndividualSelectedSkills] = useState([]);
 
   const [worker, setWorker] = useState({
     firstname: "",
@@ -55,7 +29,7 @@ const NewWorker = () => {
     description: "",
     visibility: true,
     cv: "NULL",
-    skills: [""],
+    skills: [],
     user: "",
   });
 
@@ -69,6 +43,20 @@ const NewWorker = () => {
     cv: "",
   });
 
+  useEffect(() => {
+    fetchSkills();
+    fetchWorkerData();
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      setWorker((prevWorker) => ({
+        ...prevWorker,
+        user: `{user.id}`,
+      }));
+    }
+  }, [user]);
+
   const fetchSkills = async () => {
     try {
       const data = await SkillsAPI.findAll();
@@ -78,15 +66,18 @@ const NewWorker = () => {
     }
   };
 
-  // Utilisez useEffect pour mettre à jour worker une fois que user est disponible
-  useEffect(() => {
-    if (user) {
-      setWorker((prevWorker) => ({
-        ...prevWorker,
-        user: `/api/users/${user.id}`,
-      }));
+  const fetchWorkerData = async () => {
+    try {
+      const response = await Axios.get(`${WORKERS_API}/${id}`);
+      const workerData = response.data;
+      setWorker(workerData);
+    } catch (error) {
+      console.error(
+        "Erreur lors de la récupération des données du travailleur:",
+        error
+      );
     }
-  }, [user]);
+  };
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.currentTarget;
@@ -100,9 +91,15 @@ const NewWorker = () => {
   };
 
   const handleSkillChange = (selectedOptions) => {
-    const selectedSkills = selectedOptions.map((option) => `/api/skills/${option.value}`);
-    setWorker({ ...worker, skills: selectedSkills });
-  };
+    const selectedSkills = selectedOptions.map(
+      (option) => `/api/skills/${option.value}`
+      );
+      console.log(selectedSkills);
+      setWorker({ ...worker, skills: selectedSkills });
+    };
+
+
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -114,13 +111,13 @@ const NewWorker = () => {
     if (worker.gender === "") apiErrors.gender = "Le genre est obligatoire";
     if (worker.description === "")
       apiErrors.description = "La description est obligatoire";
-    if (selectedSkills.length === 0)
+    if (worker.skills.length === 0)
       apiErrors.skills = "Les compétences sont obligatoires";
     setErrors(apiErrors);
     try {
       console.log(worker);
-      await Axios.post("http://127.0.0.1:8000/api/workers", worker);
-      toast.success("Le travailleur a bien été enregistré");
+      await Axios.put(`${WORKERS_API}/${id}`, worker); // Utilisez la méthode PUT pour la mise à jour
+      toast.success("Le travailleur a bien été mis à jour");
       navigate("/workers");
     } catch ({ response }) {
       const { violations } = response.data;
@@ -135,9 +132,15 @@ const NewWorker = () => {
     }
   };
 
+  const wskills = worker.skills.map((skill) => {
+    return { value: skill.id, label: skill.name };
+  });
+
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-semibold mb-4">Créer un travailleur</h1>
+      <h1 className="text-3xl font-semibold mb-4">
+        Mettre à jour le travailleur
+      </h1>
       <form
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
@@ -165,17 +168,6 @@ const NewWorker = () => {
           </div>
         </div>
         <div className="md:flex md:items-center mb-6">
-          <div className="md:w-1/2 px-3 mb-6 md:mb-0">
-            <Field
-              type="date"
-              name={"age"}
-              label={"Date"}
-              placeholder={"Date du travailleur"}
-              value={worker.age}
-              onChange={handleChange}
-              error={errors.age}
-            />
-          </div>
           <div className="md:w-1/2 px-3">
             <Field
               name="gender"
@@ -199,28 +191,54 @@ const NewWorker = () => {
         </div>
 
         <div className="mb-6">
-      <label className="block text-gray-700 mb-2">Compétences :</label>
-      {newSkills.map((newSkill, index) => (
-        <div className="input-group mb-3" key={index}>
-          <Select
-            isMulti
-            name="skills"
-            options={skills.map((skill) => ({
-              value: skill.id,
-              label: skill.name,
-            }))}
-            
-            onChange={handleSkillChange}
-            className="basic-multi-select"
-            classNamePrefix="select"
-          />
+          <label className="block text-gray-700 mb-2">Compétences :</label>
+          <div className="input-group mb-3">
+  <Select
+    isMulti
+    name="skills"
+    onChange={handleSkillChange}
+    className="basic-multi-select"
+    classNamePrefix="select"
+    defaultValue={worker.skills.map((skill) => ({
+      value: skill.id,
+      label: skill.name,
+    }))}
+    options={skills.map((skill) => ({
+      value: skill.id,
+      label: skill.name,
+    }))}
+  />
+</div>
+          <div className="input-group mb-3">
+            {worker.skills.map((skill, index) => {
+              // Trouvez l'objet de compétence correspondant dans le tableau 'skills'
+              const selectedSkill = skills.find((s) => s.name === skill.name);
+
+              return (
+                <Select
+                  key={index}
+                  isMulti
+                  name="skills"
+                  onChange={handleSkillChange}
+                  className="basic-multi-select"
+                  classNamePrefix="select"
+                  defaultValue={
+                    selectedSkill
+                      ? [{ value: selectedSkill.id, label: selectedSkill.name }]
+                      : []
+                  }
+                  options={skills.map((skill) => ({
+                    value: skill.id,
+                    label: skill.name,
+                  }))}
+                />
+              );
+            })}
+          </div>
         </div>
-      ))}
-    </div>
+
         <div className="mb-6">
-          <label className="block text-gray-700 mb-2">
-            Visibilité :
-          </label>
+          <label className="block text-gray-700 mb-2">Visibilité :</label>
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -238,13 +256,13 @@ const NewWorker = () => {
             type="submit"
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
-            Enregistrer
+            Enregistrer les modifications
           </button>
           <Link
             to="/workers"
             className="text-gray-500 font-bold hover:text-gray-700"
           >
-            Retour à la liste
+            Annuler
           </Link>
         </div>
       </form>
@@ -252,4 +270,4 @@ const NewWorker = () => {
   );
 };
 
-export default NewWorker;
+export default UpdateWorker;

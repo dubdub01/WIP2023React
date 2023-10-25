@@ -34,74 +34,83 @@ const UserPage = () => {
   }
 
   return (
-    <div className="container">
-      <h1 className="mt-4">Informations de l'utilisateur</h1>
-      <div className="card mt-4">
-        <div className="card-body">
-          <h5 className="card-title">Nom d'utilisateur :</h5>
-          <p className="card-text">{user.username}</p>
-          <h5 className="card-title">Adresse e-mail :</h5>
-          <p className="card-text">{user.eMail}</p>
-          <h5 className="card-title">Cover :</h5>
+    <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-semibold mt-4">
+        Informations de l'utilisateur
+      </h1>
+      <div className="bg-white shadow-md rounded p-4 mt-4 flex">
+        <div className="flex-grow">
+          <h5 className="text-xl font-semibold">Nom d'utilisateur :</h5>
+          <p className="text-gray-700">{user.username}</p>
+          <h5 className="text-xl font-semibold mt-4">Adresse e-mail :</h5>
+          <p className="text-gray-700">{user.eMail}</p>
+        </div>
+        <div className="w-1/2">
           <img
             src={`${BASE_URL}uploads/images/${user.image}`}
             alt="Couverture de l'utilisateur"
-            className="img-fluid"
+            className="w-auto h-30"
           />
-          {/* Affichez d'autres informations de l'utilisateur ici */}
         </div>
       </div>
 
-      <h2 className="mt-4">Entreprises</h2>
+      <h2 className="text-3xl font-semibold mt-4">Entreprises</h2>
       {user.company.length > 0 ? (
         user.company.map((company, index) => (
-          <div className="card mt-4" key={index}>
-            <div className="card-body">
-              <h5 className="card-title">{company.name}</h5>
-              <p className="card-text">{company.description}</p>
-              <h6 className="card-subtitle mb-2 text-muted">Secteurs :</h6>
-              <ul>
-                {company.sector.map((sector, index) => (
-                  <li key={index}>{sector.name}</li>
-                ))}
-              </ul>
-              <img
-                src={`${BASE_URL}uploads/images/${company.cover}`}
-                alt="Couverture de l'entreprise"
-                className="img-fluid"
-              />
-              <p className="card-text">
+          <div className="bg-white shadow-md rounded p-4 mt-4" key={index}>
+            <div className="mt-4">
+              <div className="flex items-center justify-start">
+                <img
+                  src={`${BASE_URL}uploads/images/${company.cover}`}
+                  alt="Logo de l'entreprise"
+                  className="w-32 h-32 object-contain"
+                />
+              </div>
+            </div>
+            <div className="flex justify-between items-center mb-4">
+              <h5 className="text-xl font-semibold">{company.name}</h5>
+              <p className="text-gray-700">
                 Province : {company.provinceName.name}
               </p>
             </div>
+            <p className="text-gray-700">{company.description}</p>
+            <h6 className="text-lg font-semibold mt-4">Secteurs :</h6>
+            <ul className="list-disc list-inside text-gray-700">
+              {company.sector.map((sector, index) => (
+                <li key={index}>{sector.name}</li>
+              ))}
+            </ul>
           </div>
         ))
       ) : (
-        <p>Aucune entreprise associée.</p>
+        <p className="text-gray-700 mt-4">Aucune entreprise associée.</p>
       )}
 
-      <h2 className="mt-4">Travailleurs associés</h2>
+      <h2 className="text-3xl font-semibold mt-4">Travailleurs associés</h2>
       {user.workers.length > 0 ? (
         user.workers.map((worker, index) => (
-          <div className="card mt-4" key={index}>
-            <div className="card-body">
-              <h5 className="card-title">
-                {worker.firstname} {worker.lastname}
-              </h5>
-              <p className="card-text">Date de naissance : {worker.age}</p>
-              <p className="card-text">Genre : {worker.gender}</p>
-              <p className="card-text">Description : {worker.description}</p>
-              <Link
-                className="btn btn-primary mx-2 d-block"
-                to={`${BASE_URL}uploads/cv/${worker.cv}`}
-              >
-                CV de {worker.firstname} {worker.lastname}
-              </Link>
-            </div>
+          <div className="bg-white shadow-md rounded p-4 mt-4" key={index}>
+            <h5 className="text-xl font-semibold">
+              {worker.firstname} {worker.lastname}
+            </h5>
+            <p className="text-gray-700">Date de naissance : {worker.age}</p>
+            <p className="text-gray-700">Genre : {worker.gender}</p>
+            <p className="text-gray-700">Description : {worker.description}</p>
+            <a
+              href={`${BASE_URL}uploads/cv/${worker.cv}`}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 inline-block"
+            >
+              CV de {worker.firstname} {worker.lastname}
+            </a>
+            <Link to={`/workers/${worker.id}/edit`}>
+          <button className="block mt-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
+            Modifier
+          </button>
+        </Link>
           </div>
         ))
       ) : (
-        <p>Aucun travailleur associé.</p>
+        <p className="text-gray-700 mt-4">Aucun travailleur associé.</p>
       )}
     </div>
   );

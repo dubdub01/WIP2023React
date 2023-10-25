@@ -67,12 +67,22 @@ const Navbar = (props) => {
             Légal
           </NavLink>
           {isAuthenticated && (
+            <div>
             <NavLink
               className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
               to="/newworker"
             >
               Nouveau Worker
             </NavLink>
+            <NavLink
+              className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+              to="/newcompany"
+            >
+              Nouvelle Entreprise
+            </NavLink>
+              
+            </div>
+            
           )}
         </div>
   

@@ -89,6 +89,7 @@ const WorkerPage = () => {
         >
           CV de {worker.firstname} {worker.lastname}
         </Link>
+        
         <div className="mt-3">
           <button
             className="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300"
