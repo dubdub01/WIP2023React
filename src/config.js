@@ -7,3 +7,4 @@ export const COMPANIES_API = API_URL + 'companies';
 export const SKILLS_API = API_URL + 'skills';
 export const LOGIN_API = API_URL + 'login_check';
 export const SECTOR_API = API_URL + 'sectors';
+export const PROVINCE_API = API_URL + 'provinces';
