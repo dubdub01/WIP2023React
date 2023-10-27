@@ -119,7 +119,7 @@ const NewWorker = () => {
     setErrors(apiErrors);
     try {
       console.log(worker);
-      await Axios.post("http://127.0.0.1:8000/api/workers", worker);
+      await Axios.post(`${WORKERS_API}`, worker);
       toast.success("Le travailleur a bien été enregistré");
       navigate("/workers");
     } catch ({ response }) {

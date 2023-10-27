@@ -3,6 +3,8 @@ import WorkersAPI from "../services/WorkersAPI";
 import SkillsAPI from "../services/SkillsAPI";
 import Pagination from "../components/Pagination";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import Select from "react-select";
 
 const WorkersPage = () => {
   const [workers, setWorkers] = useState([]);
@@ -11,6 +13,9 @@ const WorkersPage = () => {
   const [skills, setSkills] = useState([]);
   const [selectedSkill, setSelectedSkill] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const { t, i18n } = useTranslation();
+    const [isClearable, setIsClearable] = useState(true);
+
   let content;
 
   useEffect(() => {
@@ -45,6 +50,21 @@ const WorkersPage = () => {
     const value = event.currentTarget.value;
     setSearch(value);
     setCurrentPage(1);
+  };
+
+  const skillOptions = skills.map((skill) => ({
+    value: skill.name,
+    label: t(`skills.${skill.name}`),
+  }));
+
+  const handleSkillChange = (selectedOption) => {
+    setIsClearable(true); // Toujours autoriser la suppression (clearable)
+    
+    if (selectedOption === null) {
+      setSelectedSkill(""); // Réinitialisation de la compétence sélectionnée
+    } else {
+      setSelectedSkill(selectedOption.value);
+    }
   };
 
   const itemsPerPage = 9;
@@ -135,7 +155,7 @@ const WorkersPage = () => {
             </p>
             <ul className="list-disc list-inside text-gray-600">
               {worker.skills.map((skill, index) => (
-                <li key={index}>{skill.name}</li>
+                <li key={index}>{t(`skills.${skill.name}`)}</li>
               ))}
             </ul>
           </Link>
@@ -148,36 +168,29 @@ const WorkersPage = () => {
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-semibold mb-4">Liste des Travailleurs</h1>
       {/* Afficher le message de chargement initial si isLoading est vrai */}
-      
-        <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mb-4">
-          <div className="flex-grow">
-            <input
-              type="text"
-              className="border rounded-md p-2 w-full"
-              placeholder="Rechercher par nom"
-              value={search}
-              onChange={handleSearch}
-            />
-          </div>
-          <div className="flex-grow">
-            <select
-              className="border rounded-md p-2 w-full"
-              value={selectedSkill}
-              onChange={(event) => setSelectedSkill(event.currentTarget.value)}
-            >
-              <option value="">Toutes les compétences</option>
-              {skills.map((skill) => (
-                <option key={skill.id} value={skill.name}>
-                  {skill.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      
-      {content}
 
-      
+      <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mb-4">
+        <div className="flex-grow">
+          <input
+            type="text"
+            className="border rounded-md p-2 w-full"
+            placeholder="Rechercher par nom"
+            value={search}
+            onChange={handleSearch}
+          />
+        </div>
+        <div className="flex-grow">
+      <Select
+        options={skillOptions}
+        value={skillOptions.find((option) => option.value === selectedSkill)}
+        onChange={handleSkillChange}
+        placeholder="Toutes les compétences"
+        isClearable={isClearable}
+      />
+    </div>
+      </div>
+
+      {content}
 
       {itemsPerPage < filteredWorkers.length && (
         <Pagination

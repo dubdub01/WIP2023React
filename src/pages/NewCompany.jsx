@@ -9,6 +9,7 @@ import Select from "react-select";
 import Axios from "axios";
 import AuthAPI from "../services/AuthAPI";
 import ProvincesAPI from "../services/ProvincesAPI";
+import { COMPANIES_API } from "../config";
 
 const NewCompany = () => {
   const navigate = useNavigate();
@@ -128,7 +129,7 @@ const NewCompany = () => {
     setErrors(apiErrors);
     try {
       console.log(company);
-      await Axios.post("http://127.0.0.1:8000/api/companies", company);
+      await Axios.post(`${COMPANIES_API}`, company);
       toast.success("L'entreprise a bien été créée");
       navigate("/companies");
     } catch (error) {

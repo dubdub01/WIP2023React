@@ -3,10 +3,13 @@ import AuthAPI from "../services/AuthAPI";
 import { useContext } from "react";
 import AuthContext from "../contexts/AuthContext";
 import { toast } from "react-toastify";
+import LanguageSelector from "../services/LanguageSelector";
+import { useTranslation } from "react-i18next";
 
 const Navbar = (props) => {
   const navigate = useNavigate();
   const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+  const { t, i18n } = useTranslation();
 
   const handleLogout = () => {
     AuthAPI.logout();
@@ -42,29 +45,30 @@ const Navbar = (props) => {
           </svg>
         </button>
         <div className="lg:flex lg:items-center lg:justify-center space-x-4">
+        <LanguageSelector />
           <NavLink
             className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
             to="/"
           >
-            Accueil
+            {t("navbar.accueil")}
           </NavLink>
           <NavLink
             className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
             to="/workers"
           >
-            Worker
+            {t("navbar.workers")}
           </NavLink>
           <NavLink
             className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
             to="/companies"
           >
-            Companies
+            {t("navbar.companies")}
           </NavLink>
           <NavLink
             className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
             to="/legal"
           >
-            Légal
+            {t("navbar.legal")}
           </NavLink>
           {isAuthenticated && (
             <div>
@@ -72,13 +76,13 @@ const Navbar = (props) => {
               className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
               to="/newworker"
             >
-              Nouveau Worker
+              {t("navbar.newWorker")}
             </NavLink>
             <NavLink
               className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
               to="/newcompany"
             >
-              Nouvelle Entreprise
+              {t("navbar.newCompany")}
             </NavLink>
               
             </div>
@@ -93,13 +97,13 @@ const Navbar = (props) => {
                 className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                 to="/registration"
               >
-                Inscription
+                {t("navbar.inscription")}
               </NavLink>
               <NavLink
                 className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                 to="/login"
               >
-                Connexion
+                {t("navbar.connexion")}
               </NavLink>
             </div>
           ) : (
@@ -108,13 +112,13 @@ const Navbar = (props) => {
                 className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                 onClick={handleLogout}
               >
-                Déconnexion
+                {t("navbar.deconnexion")}
               </button>
               <NavLink
                 className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                 to="/user"
               >
-                Mon compte
+                {t("navbar.profil")}
               </NavLink>
             </div>
           )}

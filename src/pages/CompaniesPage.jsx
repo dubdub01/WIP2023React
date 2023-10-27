@@ -4,6 +4,8 @@ import CompaniesAPI from "../services/CompaniesAPI";
 import { Link } from "react-router-dom";
 import { BASE_URL } from "../config";
 import SectorsAPI from "../services/SectorsAPI";
+import { useTranslation } from "react-i18next";
+import Select from "react-select";
 
 const CompaniesPage = (props) => {
   const [companies, setCompanies] = useState([]);
@@ -12,6 +14,8 @@ const CompaniesPage = (props) => {
   const [sectors, setSectors] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const { t, i18n } = useTranslation();
+  const [isClearable, setIsClearable] = useState(true);
   let content;
 
   useEffect(() => {
@@ -58,6 +62,21 @@ const CompaniesPage = (props) => {
 
     return isNameMatch && isSectorMatch && isVisible;
   });
+
+  const sectorOptions = sectors.map((sector) => ({
+    value: sector.name,
+    label: t(`sectors.${sector.name}`),
+  }));
+
+  const handlesectorChange = (selectedOption) => {
+    setIsClearable(true); // Toujours autoriser la suppression (clearable)
+    
+    if (selectedOption === null) {
+      setSelectedSector(""); // Réinitialisation de la compétence sélectionnée
+    } else {
+      setSelectedSector(selectedOption.value);
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -126,8 +145,7 @@ const CompaniesPage = (props) => {
               </p>
               <ul className="list-disc list-inside text-gray-600 mb-2">
                 {company.sector.map((sector, index) => (
-                  <li key={index}>{sector.name}</li>
-                ))}
+                  <li key={index}>{t(`sectors.${sector.name}`)}</li>                ))}
               </ul>
               <p className="text-gray-600">
                 <strong>Province :</strong> {company.provinceName.name}
@@ -154,18 +172,13 @@ const CompaniesPage = (props) => {
           />
         </div>
         <div className="flex-grow">
-          <select
-            className="border rounded-md p-2 w-full"
-            value={selectedSector}
-            onChange={(event) => setSelectedSector(event.currentTarget.value)}
-          >
-            <option value="">Tous les secteurs</option>
-            {sectors.map((sector) => (
-              <option key={sector.id} value={sector.name}>
-                {sector.name}
-              </option>
-            ))}
-          </select>
+        <Select
+        options={sectorOptions}
+        value={sectorOptions.find((option) => option.value === selectedSector)}
+        onChange={handlesectorChange}
+        placeholder="Toutes les compétences"
+        isClearable={isClearable}
+      />
         </div>
       </div>
 
