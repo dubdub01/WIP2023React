@@ -71,6 +71,11 @@ const UpdateWorker = () => {
       const response = await Axios.get(`${WORKERS_API}/${id}`);
       const workerData = response.data;
       setWorker(workerData);
+      const tabSkills = workerData.skills.map(skills => {
+        return { value: skills.id, label: skills.name }
+      } )
+      setSelectedSkills(tabSkills);
+      console.log(selectedSkills);
     } catch (error) {
       console.error(
         "Erreur lors de la récupération des données du travailleur:",
@@ -93,13 +98,11 @@ const UpdateWorker = () => {
   const handleSkillChange = (selectedOptions) => {
     const selectedSkills = selectedOptions.map(
       (option) => `/api/skills/${option.value}`
-      );
-      console.log(selectedSkills);
-      setWorker({ ...worker, skills: selectedSkills });
-    };
-
-
-  
+    );
+    console.log(selectedOptions);
+    setSelectedSkills(selectedOptions)
+    setWorker({ ...worker, skills: selectedSkills });
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -133,11 +136,14 @@ const UpdateWorker = () => {
   };
 
   const wskills = worker.skills.map((skill) => {
-    return { value: skill.id, label: skill.name };
+    return ({ value: skill.id, label: skill.name });
   });
 
+
+  console.log(wskills);
   return (
     <div className="container mx-auto p-4">
+      {/* {wskills} */}
       <h1 className="text-3xl font-semibold mb-4">
         Mettre à jour le travailleur
       </h1>
@@ -192,49 +198,18 @@ const UpdateWorker = () => {
 
         <div className="mb-6">
           <label className="block text-gray-700 mb-2">Compétences :</label>
-          <div className="input-group mb-3">
-  <Select
-    isMulti
-    name="skills"
-    onChange={handleSkillChange}
-    className="basic-multi-select"
-    classNamePrefix="select"
-    defaultValue={worker.skills.map((skill) => ({
-      value: skill.id,
-      label: skill.name,
-    }))}
-    options={skills.map((skill) => ({
-      value: skill.id,
-      label: skill.name,
-    }))}
-  />
-</div>
-          <div className="input-group mb-3">
-            {worker.skills.map((skill, index) => {
-              // Trouvez l'objet de compétence correspondant dans le tableau 'skills'
-              const selectedSkill = skills.find((s) => s.name === skill.name);
-
-              return (
-                <Select
-                  key={index}
-                  isMulti
-                  name="skills"
-                  onChange={handleSkillChange}
-                  className="basic-multi-select"
-                  classNamePrefix="select"
-                  defaultValue={
-                    selectedSkill
-                      ? [{ value: selectedSkill.id, label: selectedSkill.name }]
-                      : []
-                  }
-                  options={skills.map((skill) => ({
-                    value: skill.id,
-                    label: skill.name,
-                  }))}
-                />
-              );
-            })}
-          </div>
+          <Select
+            isMulti
+            name="skills"
+            onChange={handleSkillChange}
+            className="basic-multi-select"
+            classNamePrefix="select"
+            value={selectedSkills}
+            options={skills.map((skill) => ({
+              value: skill.id,
+              label: skill.name,
+            }))}
+          />
         </div>
 
         <div className="mb-6">

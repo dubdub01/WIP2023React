@@ -4,10 +4,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import Axios from 'axios'
 import { toast } from "react-toastify";
 import { USER_API } from "../config";
+import { useTranslation } from "react-i18next";
 
 const RegisterPage = () => {
 
     const navigate = useNavigate()
+    const { t, i18n } = useTranslation();
 
     const [user, setUser] = useState({
         username: "",
@@ -89,12 +91,12 @@ const RegisterPage = () => {
 
     return (
         <>
-            <h1>Inscription</h1>
+            <h1>{t("creation.title")}</h1>
             <form onSubmit={handleSubmit}>
                 <Field 
                     name="username"
-                    label="username"
-                    placeholder="username"
+                    label={t("creation.username")}
+                    placeholder={t("creation.votreUsername")}
                     error={errors.username}
                     value={user.username}
                     onChange={handleChange}
@@ -102,8 +104,8 @@ const RegisterPage = () => {
                 <Field 
                     type="eMail"
                     name="eMail"
-                    label="Adresse E-mail"
-                    placeholder="Votre adresse E-mail"
+                    label={t("creation.email")}
+                    placeholder={t("creation.votreEmail")}
                     error={errors.eMail}
                     value={user.eMail}
                     onChange={handleChange}
@@ -111,20 +113,20 @@ const RegisterPage = () => {
                 <Field 
                     type="password"
                     name="password"
-                    label="Mot de passe"
-                    placeholder="Votre mot de passe"
+                    label={t("creation.password")}
+                    placeholder={t("creation.votrePassword")}
                     error={errors.password}
                     value={user.password}
                     onChange={handleChange}
                 />
                 <div className="my-3">
-                        <label htmlFor="image">Image: </label>
+                        <label htmlFor="image">{t("creation.image")} </label>
                         <input type="file" name="image" id="image" className='form-control' onChange={handleFileChange} />
                         {errors.image && <p className="text-danger">{errors.image}</p>}
                     </div>
                 <div className="my-3">
-                    <button type="submit" className="btn btn-success">Confirmation</button>
-                    <Link to="/login" className="btn btn-secondary">J'ai déjà un compte</Link>
+                    <button type="submit" className="btn btn-success">{t("creation.confirmation")}</button>
+                    <Link to="/login" className="btn btn-secondary">{t("creation.annulerInscription")}</Link>
                 </div>
             </form>
         </>

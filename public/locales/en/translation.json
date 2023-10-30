@@ -199,5 +199,25 @@
     "Télécommunications": "Telecommunications",
     "Tourisme et loisirs": "Tourism and leisure",
     "Vente et distribution": "Sales and distribution"
+  },
+  "creation": {
+    "title": "Account Creation",
+    "username": "Username",
+    "votreUsername": "Your username",
+    "email": "Email Address",
+    "votreEmail": "Your email address",
+    "password": "Password",
+    "votrePassword": "Your password",
+    "image": "Profile Image",
+    "confirmation": "Confirm Registration",
+    "annulerInscription": "I already have an account"
+  },
+  "connexion":{
+    "title": "Connexion",
+    "email": "Email Address",
+    "emailBox": "You Email Address",
+    "password": "Password",
+    "passwordBox": "Your Password",
+    "connexion": "Connexion"
   }
 }
