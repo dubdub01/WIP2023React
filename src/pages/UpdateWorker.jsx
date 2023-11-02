@@ -14,12 +14,8 @@ import Select from "react-select";
 const UpdateWorker = () => {
   const navigate = useNavigate();
   const { id } = useParams(); // Obtenez l'ID du travailleur depuis l'URL
-  const [user, setUser] = useState(null);
-  const token = window.localStorage.getItem("authToken");
   const [skills, setSkills] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState("");
-  const [newSkills, setNewSkills] = useState([""]);
-  const [individualSelectedSkills, setIndividualSelectedSkills] = useState([]);
 
   const [worker, setWorker] = useState({
     firstname: "",
@@ -27,7 +23,7 @@ const UpdateWorker = () => {
     age: "",
     gender: "",
     description: "",
-    visibility: true,
+    visibility: "",
     cv: "NULL",
     skills: [],
     user: "",
@@ -48,14 +44,6 @@ const UpdateWorker = () => {
     fetchWorkerData();
   }, []);
 
-  useEffect(() => {
-    if (user) {
-      setWorker((prevWorker) => ({
-        ...prevWorker,
-        user: `{user.id}`,
-      }));
-    }
-  }, [user]);
 
   const fetchSkills = async () => {
     try {
@@ -70,10 +58,17 @@ const UpdateWorker = () => {
     try {
       const response = await Axios.get(`${WORKERS_API}/${id}`);
       const workerData = response.data;
-      setWorker(workerData);
+      const workerSkillsIRI = workerData.skills.map((skill) => `/api/skills/${skill.id}`);
+      
+      // Utilisez {} pour envelopper les propriétés de l'objet
+      setWorker({
+        ...workerData,
+        skills: workerSkillsIRI, // Assurez-vous que skills contient les IRI des compétences
+      });
+  
       const tabSkills = workerData.skills.map(skills => {
         return { value: skills.id, label: skills.name }
-      } )
+      });
       setSelectedSkills(tabSkills);
       console.log(selectedSkills);
     } catch (error) {
@@ -96,9 +91,7 @@ const UpdateWorker = () => {
   };
 
   const handleSkillChange = (selectedOptions) => {
-    const selectedSkills = selectedOptions.map(
-      (option) => `/api/skills/${option.value}`
-    );
+    const selectedSkills = selectedOptions.map((option) => `/api/skills/${option.value}`);
     console.log(selectedOptions);
     setSelectedSkills(selectedOptions)
     setWorker({ ...worker, skills: selectedSkills });
@@ -118,8 +111,9 @@ const UpdateWorker = () => {
       apiErrors.skills = "Les compétences sont obligatoires";
     setErrors(apiErrors);
     try {
-      console.log(worker);
-      await Axios.put(`${WORKERS_API}/${id}`, worker); // Utilisez la méthode PUT pour la mise à jour
+      // Excluez l'attribut "user" de l'objet worker envoyé dans la requête PUT
+      const { user, ...updatedWorker } = worker;
+      await Axios.put(`${WORKERS_API}/${id}`, updatedWorker); // Utilisez la méthode PUT pour la mise à jour
       toast.success("Le travailleur a bien été mis à jour");
       navigate("/workers");
     } catch ({ response }) {
