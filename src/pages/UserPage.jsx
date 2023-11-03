@@ -8,6 +8,7 @@ import Axios from "axios";
 const UserPage = () => {
   const [user, setUser] = useState(null);
   const token = window.localStorage.getItem("authToken");
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   useEffect(() => {
     if (token) {
@@ -28,6 +29,27 @@ const UserPage = () => {
         });
     }
   }, [token]);
+
+  const handleDeleteWorker = async (workerId) => {
+    try {
+      // Envoyer une demande de suppression au serveur avec workerId
+      await Axios.delete(`${BASE_URL}api/workers/${workerId}`);
+      // Rafraîchir la liste des travailleurs après suppression
+      const updatedWorkers = user.workers.filter(
+        (worker) => worker.id !== workerId
+      );
+      setUser({ ...user, workers: updatedWorkers });
+      // Afficher un message de succès ou utiliser une notification
+      console.log(`Le travailleur avec l'ID ${workerId} a été supprimé.`);
+    } catch (error) {
+      // Gérer les erreurs de suppression
+      console.error(
+        `Erreur lors de la suppression du travailleur avec l'ID ${workerId}:`,
+        error
+      );
+      // Afficher un message d'erreur ou utiliser une notification
+    }
+  };
 
   if (!user) {
     return <div>Chargement en cours...</div>;
@@ -96,6 +118,7 @@ const UserPage = () => {
             <p className="text-gray-700">Date de naissance : {worker.age}</p>
             <p className="text-gray-700">Genre : {worker.gender}</p>
             <p className="text-gray-700">Description : {worker.description}</p>
+            
             <a
               href={`${BASE_URL}uploads/cv/${worker.cv}`}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 inline-block"
@@ -103,10 +126,39 @@ const UserPage = () => {
               CV de {worker.firstname} {worker.lastname}
             </a>
             <Link to={`/workers/${worker.id}/edit`}>
-          <button className="block mt-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
-            Modifier
-          </button>
-        </Link>
+              <button className="block mt-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
+                Modifier
+              </button>
+            </Link>
+            <button
+              className="block mt-4 bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300"
+              onClick={() => setShowConfirmation(true)}
+            >
+              Supprimer
+            </button>
+            {showConfirmation && (
+              <div className="fixed top-0 left-0 w-full h-full bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+                <div className="bg-white p-4 rounded-lg shadow-md">
+                  <p className="text-xl font-semibold mb-4">
+                    Confirmer la suppression ?
+                  </p>
+                  <div className="flex justify-between">
+                    <button
+                      className="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300"
+                      onClick={() => handleDeleteWorker(worker.id)}
+                    >
+                      Oui
+                    </button>
+                    <button
+                      className="bg-gray-400 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-500 transition duration-300"
+                      onClick={() => setShowConfirmation(false)}
+                    >
+                      Annuler
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         ))
       ) : (

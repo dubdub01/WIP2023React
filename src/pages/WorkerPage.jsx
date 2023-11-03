@@ -6,10 +6,13 @@ import DeleteConfirmation from "../components/DeleteConfirmation";
 import { BASE_URL } from "../config";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Rating from "../services/Rating";
+import RatingStars from "../services/RatingStars";
 
 const WorkerPage = () => {
   const { id = "new" } = useParams();
   const navigate = useNavigate();
+  const [isLoadingRating, setIsLoadingRating] = useState(true);
 
   const [worker, setWorker] = useState({
     lastname: "",
@@ -18,6 +21,7 @@ const WorkerPage = () => {
     age: "",
     description: "",
     skills: [],
+    ratings: [],
   });
 
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -48,34 +52,48 @@ const WorkerPage = () => {
   const handleSendEmail = async () => {
     try {
       // Effectuez une requête POST vers votre API Symfony pour envoyer l'e-mail.
-      const response = await axios.post(`${BASE_URL}api/workers/${id}/email`, {});
+      const response = await axios.post(
+        `${BASE_URL}api/workers/${id}/email`,
+        {}
+      );
       console.log(response.data.message);
       // Traitez la réponse (par exemple, affichez un message de confirmation).
-      if (response.data.message === 'E-mail envoyé avec succès') {
-        toast.success('E-mail envoyé avec succès');
+      if (response.data.message === "E-mail envoyé avec succès") {
+        toast.success("E-mail envoyé avec succès");
       } else {
-        toast.error('Erreur lors de l\'envoi de l\'e-mail');
+        toast.error("Erreur lors de l'envoi de l'e-mail");
       }
     } catch (error) {
       // Gérez les erreurs ici (par exemple, affichez un message d'erreur).
-      toast.error('Erreur lors de l\'envoi de l\'e-mail');
+      toast.error("Erreur lors de l'envoi de l'e-mail");
     }
   };
-  
 
   const fetchWorker = async (id) => {
     try {
       const workerData = await WorkersAPI.find(id);
 
       const formattedAge = formatDate(workerData.age);
+      const averageRating = calculateAverageRating(workerData.ratings);
 
       setWorker({
         ...workerData,
         age: formattedAge,
+        averageRating: averageRating, // Ajoutez la moyenne des évaluations à l'état du travailleur.
       });
+      setIsLoadingRating(false);
     } catch (error) {
       navigate("/workers", { replace: true });
     }
+  };
+
+  const calculateAverageRating = (ratings) => {
+    if (ratings.length === 0) {
+      return "ce travailleur n'a aucune note pour le moment"; // Retournez 0 s'il n'y a aucune évaluation.
+    }
+
+    const totalRating = ratings.reduce((sum, rating) => sum + rating.value, 0);
+    return totalRating / ratings.length;
   };
 
   return (
@@ -100,36 +118,41 @@ const WorkerPage = () => {
                 <li key={index}>{skill.name}</li>
               ))}
             </ul>
-            <Link
-              href={`${BASE_URL}uploads/cv/${worker.cv}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block mt-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
-            >
-              CV de {worker.firstname} {worker.lastname}
-            </Link>
-
-            <div className="mt-3">
-              <button
-                className="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300"
-                onClick={() => setShowConfirmation(true)}
+            
+            {worker.cv ? (
+              // Si le travailleur a un CV, affichez le lien
+              <a
+                href={`${BASE_URL}uploads/cv/${worker.cv}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block mt-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
               >
-                Supprimer
-              </button>
-
-              {showConfirmation && (
-                <DeleteConfirmation
-                  onConfirm={handleDelete}
-                  onCancel={() => setShowConfirmation(false)}
-                />
-              )}
-            </div>
+                CV de {worker.firstname} {worker.lastname}
+              </a>
+            ) : (
+              // Sinon, affichez un message indiquant qu'il n'y a pas de CV
+              <div>Le travailleur n'a pas de CV</div>
+            )}
             <button
               className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300"
               onClick={handleSendEmail}
             >
               Envoyer un e-mail
             </button>
+            <div className="mt-4">
+              <span className="text-lg font-semibold">Note moyenne:</span>
+              {isLoadingRating ? (
+                <div>Chargement de la note...</div>
+              ) : (
+                <div>
+                  {typeof worker.averageRating === "string" ? (
+                    <p>{worker.averageRating}</p>
+                  ) : (
+                    <RatingStars averageRating={worker.averageRating} />
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

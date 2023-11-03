@@ -54,7 +54,7 @@ const NewWorker = () => {
     gender: "",
     description: "",
     visibility: "",
-    cv: "NULL",
+    cv: "",
     skills: [""],
     user: "",
   });

@@ -5,6 +5,7 @@ import Pagination from "../components/Pagination";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Select from "react-select";
+import RatingStars from "../services/RatingStars";
 
 const WorkersPage = () => {
   const [workers, setWorkers] = useState([]);
@@ -14,7 +15,8 @@ const WorkersPage = () => {
   const [selectedSkill, setSelectedSkill] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const { t, i18n } = useTranslation();
-    const [isClearable, setIsClearable] = useState(true);
+  const [isClearable, setIsClearable] = useState(true);
+  const [sortByRating, setSortByRating] = useState(false);
 
   let content;
 
@@ -59,7 +61,7 @@ const WorkersPage = () => {
 
   const handleSkillChange = (selectedOption) => {
     setIsClearable(true); // Toujours autoriser la suppression (clearable)
-    
+
     if (selectedOption === null) {
       setSelectedSkill(""); // Réinitialisation de la compétence sélectionnée
     } else {
@@ -83,6 +85,15 @@ const WorkersPage = () => {
     return isNameMatch && isSkillMatch && isVisible;
   });
 
+  const calculateAverageRating = (ratings) => {
+    if (ratings.length === 0) {
+      return 0; // Retournez 0 s'il n'y a aucune évaluation.
+    }
+
+    const totalRating = ratings.reduce((sum, rating) => sum + rating.value, 0);
+    return totalRating / ratings.length;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -99,8 +110,26 @@ const WorkersPage = () => {
     fetchData();
   }, []);
 
-  const paginatedWorkers = Pagination.getData(
-    filteredWorkers,
+  let sortedWorkers = [...filteredWorkers];
+
+  if (sortByRating) {
+    // Tri par note croissante
+    sortedWorkers.sort((a, b) => {
+      const ratingA = calculateAverageRating(a.ratings);
+      const ratingB = calculateAverageRating(b.ratings);
+      return ratingA - ratingB;
+    });
+  } else {
+    // Tri par note décroissante
+    sortedWorkers.sort((a, b) => {
+      const ratingA = calculateAverageRating(a.ratings);
+      const ratingB = calculateAverageRating(b.ratings);
+      return ratingB - ratingA;
+    });
+  }
+
+  const paginatedSortedWorkers = Pagination.getData(
+    sortedWorkers,
     currentPage,
     itemsPerPage
   );
@@ -135,7 +164,7 @@ const WorkersPage = () => {
   } else {
     content = (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-        {paginatedWorkers.map((worker) => (
+        {paginatedSortedWorkers.map((worker) => (
           <Link
             to={`/workers/${worker.id}`}
             className="block bg-white border rounded-md p-4 shadow-md mb-4 hover:scale-105 transform transition-transform duration-300"
@@ -158,6 +187,15 @@ const WorkersPage = () => {
                 <li key={index}>{t(`skills.${skill.name}`)}</li>
               ))}
             </ul>
+            <div className="mt-4">
+              {worker.ratings.length === 0 ? (
+                <div>ce travailleur n'a aucune note pour le moment</div>
+              ) : (
+                <RatingStars
+                  averageRating={calculateAverageRating(worker.ratings)}
+                />
+              )}
+            </div>
           </Link>
         ))}
       </div>
@@ -180,14 +218,25 @@ const WorkersPage = () => {
           />
         </div>
         <div className="flex-grow">
-      <Select
-        options={skillOptions}
-        value={skillOptions.find((option) => option.value === selectedSkill)}
-        onChange={handleSkillChange}
-        placeholder="Toutes les compétences"
-        isClearable={isClearable}
-      />
-    </div>
+          <Select
+            options={skillOptions}
+            value={skillOptions.find(
+              (option) => option.value === selectedSkill
+            )}
+            onChange={handleSkillChange}
+            placeholder="Toutes les compétences"
+            isClearable={isClearable}
+          />
+        </div>
+        <button
+          className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
+          onClick={() => setSortByRating(!sortByRating)}
+        >
+          {sortByRating
+            ? "Trier par note croissante"
+            : "Trier par note décroissante"
+            }
+        </button>
       </div>
 
       {content}
