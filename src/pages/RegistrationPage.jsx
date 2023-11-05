@@ -5,6 +5,7 @@ import Axios from 'axios'
 import { toast } from "react-toastify";
 import { USER_API } from "../config";
 import { useTranslation } from "react-i18next";
+import { BASE_URL } from "../config";
 
 const RegisterPage = () => {
 
@@ -53,7 +54,7 @@ const RegisterPage = () => {
 
             await Axios({
               method: "post",
-              url: "http://127.0.0.1:8000/api/users/upload",
+              url: `${BASE_URL}api/users/upload`,
               data: formData,
               headers: { "Content-type":"multipart/form-data; charset=utf-8; boundary=" + Math.random().toString().substring(2)}
             }).then(response => {

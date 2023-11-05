@@ -131,7 +131,7 @@ const Navbar = (props) => {
                   {t("navbar.profil")}
                 </NavLink>
                 <a
-                  href="http://127.0.0.1:8000/admin/user"
+                  href="http://wipadmin.duboismax.com/"
                   className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                   to="/admin"
                 >
