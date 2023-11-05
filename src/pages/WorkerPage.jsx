@@ -8,11 +8,14 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Rating from "../services/Rating";
 import RatingStars from "../services/RatingStars";
+import AuthAPI from "../services/AuthAPI";
 
 const WorkerPage = () => {
   const { id = "new" } = useParams();
   const navigate = useNavigate();
   const [isLoadingRating, setIsLoadingRating] = useState(true);
+  const [user, setUser] = useState(null);
+  const token = window.localStorage.getItem("authToken");
 
   const [worker, setWorker] = useState({
     lastname: "",
@@ -24,7 +27,24 @@ const WorkerPage = () => {
     ratings: [],
   });
 
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  useEffect(() => {
+    if (token) {
+      // Utilisez le token pour récupérer les informations de l'utilisateur
+      AuthAPI.getUserInfoByToken(token)
+        .then((userData) => {
+          // Accédez aux données de l'utilisateur dans la réponse
+          const userId = userData.id;
+          // Mettez à jour l'état de l'utilisateur avec les données
+          setUser(userData);
+        })
+        .catch((error) => {
+          console.error(
+            "Erreur lors de la récupération des informations de l'utilisateur :",
+            error
+          );
+        });
+    }
+  }, [token]);
 
   useEffect(() => {
     if (id !== "new") {
@@ -96,6 +116,23 @@ const WorkerPage = () => {
     return totalRating / ratings.length;
   };
 
+
+  const handleAddToContacted = async () => {
+    try {
+      // Effectuez une requête POST pour ajouter le worker à la liste des travailleurs contactés de l'utilisateur
+      await axios.post(
+        `${BASE_URL}api/users/${user.id}/add-worker-to-contacted/${id}`
+      );
+      toast.success(
+        "Le travailleur a été ajouté à la liste des travailleurs contactés."
+      );
+    } catch (error) {
+      toast.error(
+        "Erreur lors de l'ajout du travailleur aux travailleurs contactés."
+      );
+    }
+  };
+
   return (
     <div className="container py-5">
       <div className="bg-white shadow-md rounded-lg p-6">
@@ -118,7 +155,7 @@ const WorkerPage = () => {
                 <li key={index}>{skill.name}</li>
               ))}
             </ul>
-            
+
             {worker.cv ? (
               // Si le travailleur a un CV, affichez le lien
               <a
@@ -135,7 +172,10 @@ const WorkerPage = () => {
             )}
             <button
               className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300"
-              onClick={handleSendEmail}
+              onClick={() => {
+                handleAddToContacted();
+                handleSendEmail();
+              }}
             >
               Envoyer un e-mail
             </button>

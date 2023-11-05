@@ -9,6 +9,7 @@ const UserPage = () => {
   const [user, setUser] = useState(null);
   const token = window.localStorage.getItem("authToken");
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [workerRatings, setWorkerRatings] = useState({});
 
   useEffect(() => {
     if (token) {
@@ -20,6 +21,12 @@ const UserPage = () => {
         })
         .then((response) => {
           setUser(response.data);
+          // Initialize worker ratings with default values
+          const ratings = {};
+          response.data.hasContacted.forEach((worker) => {
+            ratings[worker.id] = worker.rating || 0; // Default rating is 0
+          });
+          setWorkerRatings(ratings);
         })
         .catch((error) => {
           console.error(
@@ -29,6 +36,8 @@ const UserPage = () => {
         });
     }
   }, [token]);
+
+  console.log(user);
 
   const handleDeleteWorker = async (workerId) => {
     try {
@@ -50,6 +59,57 @@ const UserPage = () => {
       // Afficher un message d'erreur ou utiliser une notification
     }
   };
+
+
+
+  const handleCreateRating = (workerId) => {
+    const newRating = workerRatings[workerId];
+  
+    // Envoyer la nouvelle note au serveur en tant que création
+    Axios.post(`${BASE_URL}api/ratings`, {
+      value: newRating,
+      worker: `/api/workers/${workerId}`,
+    })
+      .then((response) => {
+        // Supprimer la relation user_worker
+        Axios.delete(
+          `${BASE_URL}api/users/${user.id}/workers/${workerId}/hasContacted`
+        )
+          .then(() => {
+            // Mettre à jour la note dans l'état local
+            setWorkerRatings({ ...workerRatings, [workerId]: newRating });
+            // Supprimer le travailleur de la liste hasContacted de l'utilisateur
+            const updatedHasContacted = user.hasContacted.filter(
+              (worker) => worker.id !== workerId
+            );
+            setUser({ ...user, hasContacted: updatedHasContacted });
+            // Afficher un message de succès ou utiliser une notification
+            console.log(
+              `Nouvelle note créée et relation user_worker supprimée.`
+            );
+          })
+          .catch((error) => {
+            console.error(
+              `Erreur lors de la suppression de la relation user_worker :`,
+              error
+            );
+            // Afficher un message d'erreur ou utiliser une notification
+          });
+      })
+      .catch((error) => {
+        console.error(
+          `Erreur lors de la création de la note pour le travailleur avec l'ID ${workerId}:`,
+          error
+        );
+        // Afficher un message d'erreur ou utiliser une notification
+      });
+    console.log(setWorkerRatings);
+  };
+  
+
+  if (user) {
+    console.log(user.hasContacted);
+  }
 
   if (!user) {
     return <div>Chargement en cours...</div>;
@@ -75,6 +135,54 @@ const UserPage = () => {
           />
         </div>
       </div>
+
+      <h2 className="text-3xl font-semibold mt-4">Utilisateurs contactés</h2>
+      {user.hasContacted.length > 0 ? (
+        user.hasContacted.map((workerContacted, index) => (
+          <div className="bg-white shadow-md rounded p-4 mt-4" key={index}>
+            <h5 className="text-xl font-semibold">
+              {workerContacted.firstname} {workerContacted.lastname}
+            </h5>
+            <p className="text-gray-700">
+              Adresse e-mail : {workerContacted.eMail}
+            </p>
+            {/* Affichez le champ de notation ici */}
+            <div className="mt-2">
+              <label
+                htmlFor={`rating-${workerContacted.id}`}
+                className="text-sm font-semibold"
+              >
+                Note :
+              </label>
+              <input
+                type="number"
+                id={`rating-${workerContacted.id}`}
+                min="0"
+                max="5"
+                step="0.5"
+                value={workerRatings[workerContacted.id]}
+                onChange={(e) => {
+                  const newValue = parseFloat(e.target.value); // Convertir en nombre décimal
+                  setWorkerRatings((prevRatings) => ({
+                    ...prevRatings,
+                    [workerContacted.id]: newValue,
+                  }));
+                }}
+                className="w-16 border border-gray-300 rounded px-2 py-1 text-sm"
+              />
+              {/* Ajoutez le bouton "Créer une note" ici */}
+              <button
+                className="ml-2 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded text-sm"
+                onClick={() => handleCreateRating(workerContacted.id)}
+              >
+                Créer une note
+              </button>
+            </div>
+          </div>
+        ))
+      ) : (
+        <p className="text-gray-700 mt-4">Aucun utilisateur contacté.</p>
+      )}
 
       <h2 className="text-3xl font-semibold mt-4">Entreprises</h2>
       {user.company.length > 0 ? (
@@ -118,7 +226,7 @@ const UserPage = () => {
             <p className="text-gray-700">Date de naissance : {worker.age}</p>
             <p className="text-gray-700">Genre : {worker.gender}</p>
             <p className="text-gray-700">Description : {worker.description}</p>
-            
+
             <a
               href={`${BASE_URL}uploads/cv/${worker.cv}`}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 inline-block"
