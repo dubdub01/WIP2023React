@@ -236,6 +236,11 @@ const UserPage = () => {
                 Modifier
               </button>
             </Link>
+            <Link to={`/companies/${company.id}/uploadimage`}>
+              <button className="block mt-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
+                Ajouter une image
+              </button>
+            </Link>
             <button
               className="block mt-4 bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300"
               onClick={() => setShowConfirmation(true)}
@@ -291,6 +296,11 @@ const UserPage = () => {
             <Link to={`/workers/${worker.id}/edit`}>
               <button className="block mt-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
                 Modifier
+              </button>
+            </Link>
+            <Link to={`/workers/${worker.id}/uploadcv`}>
+              <button className="block mt-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
+                ajouter cv
               </button>
             </Link>
             <button
