@@ -33,7 +33,6 @@ const NewWorker = () => {
         .then((userData) => {
           // Accédez aux données de l'utilisateur dans la réponse
           const userId = userData.id;
-          console.log(userData.id);
 
           // Mettez à jour l'état de l'utilisateur avec les données
           setUser(userData);

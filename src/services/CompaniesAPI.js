@@ -13,7 +13,7 @@ function find(id)
               .then(response => response.data)
 }
 
-function deleteWorker(id){
+function deleteCompany(id){
   return Axios.delete(`${COMPANIES_API}/${id}`)
 }
 
@@ -25,6 +25,6 @@ async function getSector(id) {
 export default {
   findAll: findAll,
   find: find,
-  delete: deleteWorker,
+  delete: deleteCompany,
   getSector: getSector
 };

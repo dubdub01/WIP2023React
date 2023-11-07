@@ -17,6 +17,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import NewWorker from "./pages/NewWorker";
 import UpdateWorker from "./pages/UpdateWorker";
+import UpdateCompany from "./pages/UpdateCompany";
 
 AuthAPI.setup();
 
@@ -43,6 +44,7 @@ const App = () => {
 
           <Route path="/companies" element={<CompaniesPage />} />
           <Route path="/newcompany" element={<NewCompany />} />
+          <Route path="/companies/:id/edit" element={<UpdateCompany />} />
           <Route path="/companies/:id" element={<CompanyPage />} />
           <Route path="/legal" element={<Legal />} />
           <Route path="/login" element={<LoginPage />} />
