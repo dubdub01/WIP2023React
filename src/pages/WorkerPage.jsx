@@ -116,23 +116,6 @@ const WorkerPage = () => {
     return totalRating / ratings.length;
   };
 
-
-  const handleAddToContacted = async () => {
-    try {
-      // Effectuez une requête POST pour ajouter le worker à la liste des travailleurs contactés de l'utilisateur
-      await axios.post(
-        `${BASE_URL}api/users/${user.id}/add-worker-to-contacted/${id}`
-      );
-      toast.success(
-        "Le travailleur a été ajouté à la liste des travailleurs contactés."
-      );
-    } catch (error) {
-      toast.error(
-        "Erreur lors de l'ajout du travailleur aux travailleurs contactés."
-      );
-    }
-  };
-
   return (
     <div className="container py-5">
       <div className="bg-white shadow-md rounded-lg p-6">
@@ -173,7 +156,6 @@ const WorkerPage = () => {
             <button
               className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300"
               onClick={() => {
-                handleAddToContacted();
                 handleSendEmail();
               }}
             >

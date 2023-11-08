@@ -32,7 +32,7 @@ const LoginPage = (props) => {
             setError("")
             setIsAuthenticated(true)
             toast.success("Vous êtes désormais connecté")
-            navigate('/', { replace: true })
+            navigate('/user', { replace: true })
         } catch (error) {
             setError("Aucun compte ne possède cette adresse e-mail ou les informations ne correspondent pas")
         }

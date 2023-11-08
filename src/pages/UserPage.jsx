@@ -81,52 +81,33 @@ const UserPage = () => {
     }
   };
 
-
-
-  const handleCreateRating = (workerId) => {
+   const handleCreateRating = async (workerId, newValue) => {
     const newRating = workerRatings[workerId];
+
+  Axios.post(`${BASE_URL}api/ratings`, {
+    value: newRating,
+    worker: `/api/workers/${workerId}`,
+  })
+    try {
+      // Envoyer la note à la base de données
+      const response = await Axios.post(
+        `${BASE_URL}api/ratings/${workerId}/rating`,      );
+      console.log(response.data.message);
+      console.log(newValue)
+      // Traitez la réponse du backend si nécessaire
   
-    // Envoyer la nouvelle note au serveur en tant que création
-    Axios.post(`${BASE_URL}api/ratings`, {
-      value: newRating,
-      worker: `/api/workers/${workerId}`,
-    })
-      .then((response) => {
-        // Supprimer la relation user_worker
-        Axios.delete(
-          `${BASE_URL}api/users/${user.id}/workers/${workerId}/hasContacted`
-        )
-          .then(() => {
-            // Mettre à jour la note dans l'état local
-            setWorkerRatings({ ...workerRatings, [workerId]: newRating });
-            // Supprimer le travailleur de la liste hasContacted de l'utilisateur
-            const updatedHasContacted = user.hasContacted.filter(
-              (worker) => worker.id !== workerId
-            );
-            setUser({ ...user, hasContacted: updatedHasContacted });
-            // Afficher un message de succès ou utiliser une notification
-            console.log(
-              `Nouvelle note créée et relation user_worker supprimée.`
-            );
-          })
-          .catch((error) => {
-            console.error(
-              `Erreur lors de la suppression de la relation user_worker :`,
-              error
-            );
-            // Afficher un message d'erreur ou utiliser une notification
-          });
-      })
-      .catch((error) => {
-        console.error(
-          `Erreur lors de la création de la note pour le travailleur avec l'ID ${workerId}:`,
-          error
-        );
-        // Afficher un message d'erreur ou utiliser une notification
-      });
-    console.log(setWorkerRatings);
+      setWorkerRatings({ ...workerRatings, [workerId]: newRating });
+      const updatedHasContacted = user.hasContacted.filter(
+        (worker) => worker.id !== workerId
+      );
+      setUser({ ...user, hasContacted: updatedHasContacted });
+
+    } catch (error) {
+      // Gérer les erreurs de création de note
+      console.error(error);
+      // Afficher un message d'erreur ou utiliser une notification
+    }
   };
-  
 
   if (user) {
     console.log(user.hasContacted);
