@@ -117,8 +117,8 @@ const WorkerPage = () => {
   };
 
   return (
-    <div className="container py-5">
-      <div className="bg-white shadow-md rounded-lg p-6">
+    <div className="container mx-auto p-4">
+    <div className="bg-white shadow-md rounded-lg p-6">
         <h1 className="text-3xl font-semibold mb-4">
           {worker.firstname} {worker.lastname}
         </h1>

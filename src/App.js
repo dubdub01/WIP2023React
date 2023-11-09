@@ -36,6 +36,7 @@ const App = () => {
 
   return (
     <AuthContext.Provider value={contextValue}>
+    <div className="bg-cover norea min-h-screen bg-[url('/public/img/Group1.png')]">
       <Router>
         <Navbar />
         <Routes>
@@ -87,6 +88,7 @@ const App = () => {
         </Routes>
       </Router>
       <ToastContainer position={toast.POSITION.BOTTOM_LEFT} />
+    </div>
     </AuthContext.Provider>
   );
 };

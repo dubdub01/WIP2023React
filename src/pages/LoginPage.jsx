@@ -39,7 +39,7 @@ const LoginPage = (props) => {
     }
 
     return (
-        <div className="bg-gradient-to-r from-blue-950 to-teal-900 h-screen flex items-center justify-center">
+        <div className=" min-h-[calc(100vh-96px)] flex items-center justify-center">
             <div className="bg-white p-8 shadow-md rounded-md w-full sm:w-96">
                 <h1 className="text-2xl font-semibold mb-4">{t("connexion.title")}</h1>
                 <form onSubmit={handleSubmit}>

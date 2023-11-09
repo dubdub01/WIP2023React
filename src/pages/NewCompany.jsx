@@ -164,9 +164,8 @@ const NewCompany = () => {
               error={errors.name}
             />
           </div>
-        </div>
-        <div className="md:flex md:items-center mb-6">
-          <div className="md:w-1/2 px-3 mb-6 md:mb-0">
+      
+          <div className="md:w-1/2 px-3">
             <Field
               name="eMail"
               label="Email"
@@ -175,7 +174,7 @@ const NewCompany = () => {
               onChange={handleChange}
               error={errors.eMail}
             />
-          </div>
+        </div>
         </div>
         <div className="mb-6">
           <Field

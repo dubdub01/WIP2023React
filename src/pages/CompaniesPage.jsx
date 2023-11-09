@@ -102,18 +102,18 @@ const CompaniesPage = (props) => {
       <div className="alert alert-info" role="alert">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
           {Array.from({ length: 9 }).map((_, index) => (
-            <div className="block bg-white border rounded-md p-4 shadow-md mb-4 hover:scale-105 transform transition-transform duration-300">
-              <div className="animate-pulse flex space-x-4">
-                <div className="flex-1 space-y-6 py-1">
-                  <div className="h-2 bg-slate-700 rounded"></div>
-                  <div className="space-y-3">
-                    <div className="h-2 bg-slate-700 rounded"></div>
-                  </div>
-                  <div className="h-2 bg-slate-700 rounded"></div>
-                  <div className="h-2 bg-slate-700 rounded"></div>
+            <div className="block bg-teal-400 border rounded-md p-4 shadow-md mb-4 hover:scale-105 transform transition-transform duration-300">
+            <div className="animate-pulse flex space-x-4">
+              <div className="flex-1 space-y-6 py-1">
+                <div className="h-2 bg-white rounded"></div>
+                <div className="space-y-3">
+                  <div className="h-2 bg-white rounded"></div>
                 </div>
+                <div className="h-2 bg-white rounded"></div>
+                <div className="h-2 bg-white rounded"></div>
               </div>
             </div>
+          </div>
           ))}
         </div>
       </div>

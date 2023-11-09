@@ -50,8 +50,8 @@ const CompanyPage = () => {
   };
 
   return (
-    <div className="container py-5">
-      <div className="bg-white shadow-md rounded-md p-6">
+    <div className="container mx-auto p-4">
+    <div className="bg-white shadow-md rounded-md p-6">
         <h1 className="text-3xl font-semibold mb-4">{company.name}</h1>
         <div className="flex flex-wrap">
           <div className="w-full md:w-1/2">

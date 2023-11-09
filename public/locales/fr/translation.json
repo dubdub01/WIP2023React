@@ -1,12 +1,13 @@
 {
   "homepage": {
-    "title": "Bienvenue sur WIP - Work in Progress !",
+    "title1": "Bienvenue sur",
+    "title2":"Work in Progress !",
     "presentation": "WIP est une plateforme en ligne qui facilite la mise en relation entre les entreprises et les talents. Que vous soyez une entreprise à la recherche de professionnels qualifiés ou un travailleur indépendant en quête d'opportunités, WIP est là pour vous aider à trouver les bonnes personnes.",
     "boutonCompanies": "Découvrir nos Companies",
     "boutonWorkers": "Découvrir nos Workers",
     "apropos": {
       "text1": "Découvrir nos Workers",
-      "text2": "WIP est une plateforme en ligne qui facilite la mise en relation des entreprises et des travailleurs indépendants. Notre objectif est de simplifier le processus de recrutement et de collaboration en offrant un espace où les entreprises peuvent trouver les talents dont elles ont besoin et où les travailleurs indépendants peuvent trouver des opportunités professionnelles.",
+      "text2": "Notre objectif est de simplifier le processus de recrutement et de collaboration en offrant un espace où les entreprises peuvent trouver les talents dont elles ont besoin et où les travailleurs indépendants peuvent trouver des opportunités professionnelles.",
       "text3": "WIP offre une large gamme de secteurs et de compétences, permettant aux entreprises de trouver les meilleurs talents pour leurs projets. Les travailleurs indépendants peuvent créer un profil détaillé, mettre en avant leurs compétences et leur expérience, et être contactés directement par les entreprises intéressées."
     }
   },

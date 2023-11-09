@@ -139,15 +139,15 @@ const WorkersPage = () => {
       <div className="alert alert-info" role="alert">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
           {Array.from({ length: 9 }).map((_, index) => (
-            <div className="block bg-white border rounded-md p-4 shadow-md mb-4 hover:scale-105 transform transition-transform duration-300">
+            <div className="block bg-teal-400 border rounded-md p-4 shadow-md mb-4 hover:scale-105 transform transition-transform duration-300">
               <div className="animate-pulse flex space-x-4">
                 <div className="flex-1 space-y-6 py-1">
-                  <div className="h-2 bg-slate-700 rounded"></div>
+                  <div className="h-2 bg-white rounded"></div>
                   <div className="space-y-3">
-                    <div className="h-2 bg-slate-700 rounded"></div>
+                    <div className="h-2 bg-white rounded"></div>
                   </div>
-                  <div className="h-2 bg-slate-700 rounded"></div>
-                  <div className="h-2 bg-slate-700 rounded"></div>
+                  <div className="h-2 bg-white rounded"></div>
+                  <div className="h-2 bg-white rounded"></div>
                 </div>
               </div>
             </div>
@@ -204,7 +204,7 @@ const WorkersPage = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-semibold mb-4">Liste des Travailleurs</h1>
+      <h1 className="text-white text-3xl font-semibold mb-4">Liste des Travailleurs</h1>
       {/* Afficher le message de chargement initial si isLoading est vrai */}
 
       <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mb-4">

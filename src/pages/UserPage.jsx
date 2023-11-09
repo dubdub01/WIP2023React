@@ -119,7 +119,7 @@ const UserPage = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 bg-white">
       <h1 className="text-3xl font-semibold mt-4">
         Informations de l'utilisateur
       </h1>
