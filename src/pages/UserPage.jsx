@@ -36,6 +36,7 @@ const UserPage = () => {
         });
     }
   }, [token]);
+  
 
   console.log(user);
 
