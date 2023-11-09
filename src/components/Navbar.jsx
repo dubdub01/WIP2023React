@@ -23,8 +23,8 @@ const Navbar = (props) => {
   console.log(isAdmin);
 
   return (
-    <nav className="">
-      <div className="p-7 container mx-auto">
+    <nav className=" ">
+      <div className="container mx-auto">
         <div className="flex items-center justify-between">
           <NavLink className="text-gray-200 text-lg font-semibold" to="/">
             WIP
@@ -51,25 +51,25 @@ const Navbar = (props) => {
           </button>
           <div className="lg:flex lg:items-center lg:justify-center space-x-4">
             <NavLink
-              className="text-gray-300 hover:bg-teal-400 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+              className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
               to="/"
-              >
+            >
               {t("navbar.accueil")}
             </NavLink>
             <NavLink
-              className="text-gray-300 hover:bg-teal-400 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+              className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
               to="/workers"
             >
               {t("navbar.workers")}
             </NavLink>
             <NavLink
-              className="text-gray-300 hover:bg-teal-400 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+              className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
               to="/companies"
             >
               {t("navbar.companies")}
             </NavLink>
             <NavLink
-              className="text-gray-300 hover:bg-teal-400 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+              className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
               to="/legal"
             >
               {t("navbar.legal")}
@@ -77,13 +77,13 @@ const Navbar = (props) => {
             {isAuthenticated && (
               <div>
                 <NavLink
-                  className="text-gray-300 hover:bg-teal-400 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                   to="/newworker"
                 >
                   {t("navbar.newWorker")}
                 </NavLink>
                 <NavLink
-                  className="text-gray-300 hover:bg-teal-400 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                   to="/newcompany"
                 >
                   {t("navbar.newCompany")}
@@ -95,22 +95,22 @@ const Navbar = (props) => {
           <div className="lg:flex space-x-4">
             {isAdmin && (
               <NavLink
-                className="text-gray-300 hover:teal-400 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                 to="/admin"
               >
                 Administration
               </NavLink>
             )}
             {!isAuthenticated ? (
-              <div className="">
+              <div className="bg">
                 <NavLink
-                  className="text-gray-300 hover:text-teal-400 px-3 py-2 text-sm font-medium rounded-[55px] border border-teal-400 m-6 "
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                   to="/registration"
                 >
                   {t("navbar.inscription")}
                 </NavLink>
                 <NavLink
-                  className="text-blue-900 hover:bg-teal-400 hover:text-white px-3 py-2 text-sm font-medium rounded-[55px] border border-teal-400 bg-teal-400"
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                   to="/login"
                 >
                   {t("navbar.connexion")}
@@ -119,20 +119,20 @@ const Navbar = (props) => {
             ) : (
               <div className="space-x-4">
                 <button
-                  className="text-gray-300 hover:bg-teal-400 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                   onClick={handleLogout}
                 >
                   {t("navbar.deconnexion")}
                 </button>
                 <NavLink
-                  className="text-gray-300 hover:bg-teal-400 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                   to="/user"
                 >
                   {t("navbar.profil")}
                 </NavLink>
                 <a
                   href="http://wipadmin.duboismax.com/"
-                  className="text-gray-300 hover:bg-teal-400 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                   to="/admin"
                 >
                   Administration

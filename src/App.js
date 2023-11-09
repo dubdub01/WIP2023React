@@ -36,7 +36,7 @@ const App = () => {
 
   return (
     <AuthContext.Provider value={contextValue}>
-    <div className="bg-cover norea min-h-screen bg-[url('/public/img/Group1.jpg')]">
+    <div className="bg-cover norea min-h-screen bg-[url('/public/img/Group1test2.jpg')]">
       <Router>
         <Navbar />
         <Routes>

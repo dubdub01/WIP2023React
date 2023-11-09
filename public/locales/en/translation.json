@@ -215,7 +215,7 @@
   "connexion":{
     "title": "Connexion",
     "email": "Email Address",
-    "emailBox": "You Email Address",
+    "emailBox": "Your Email Address",
     "password": "Password",
     "passwordBox": "Your Password",
     "connexion": "Connexion"
