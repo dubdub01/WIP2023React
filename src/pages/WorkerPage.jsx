@@ -9,6 +9,8 @@ import axios from "axios";
 import Rating from "../services/Rating";
 import RatingStars from "../services/RatingStars";
 import AuthAPI from "../services/AuthAPI";
+import { useTranslation } from "react-i18next";
+
 
 const WorkerPage = () => {
   const { id = "new" } = useParams();
@@ -16,6 +18,8 @@ const WorkerPage = () => {
   const [isLoadingRating, setIsLoadingRating] = useState(true);
   const [user, setUser] = useState(null);
   const token = window.localStorage.getItem("authToken");
+  const { t, i18n } = useTranslation();
+
 
   const [worker, setWorker] = useState({
     lastname: "",
@@ -124,15 +128,16 @@ const WorkerPage = () => {
         </h1>
         <div className="flex flex-wrap">
           <div className="w-full md:w-1/2">
-            <h5 className="font-semibold">Genre:</h5>
+            <h5 className="font-semibold">{t("worker.workerGenre")}
+</h5>
             <p>{worker.gender}</p>
-            <h5 className="font-semibold mt-2">Date de naissance:</h5>
+            <h5 className="font-semibold mt-2">{t("worker.workerDate")}</h5>
             <p>{worker.age}</p>
           </div>
           <div className="w-full md:w-1/2">
-            <h5 className="font-semibold">Description:</h5>
+            <h5 className="font-semibold">{t("worker.workerDescription")}</h5>
             <p>{worker.description}</p>
-            <h5 className="font-semibold mt-2">Compétences:</h5>
+            <h5 className="font-semibold mt-2">{t("worker.workerCompétence")}</h5>
             <ul className="list-disc pl-4">
               {worker.skills.map((skill, index) => (
                 <li key={index}>{skill.name}</li>
@@ -151,8 +156,10 @@ const WorkerPage = () => {
               </a>
             ) : (
               // Sinon, affichez un message indiquant qu'il n'y a pas de CV
-              <div>Le travailleur n'a pas de CV</div>
+              <div>{t("worker.workerNoCv")}</div>
             )}
+                      {user && (
+
             <button
               className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300"
               onClick={() => {
@@ -161,10 +168,11 @@ const WorkerPage = () => {
             >
               Envoyer un e-mail
             </button>
+                      )}
             <div className="mt-4">
-              <span className="text-lg font-semibold">Note moyenne:</span>
+              <span className="text-lg font-semibold">{t("worker.workerNoCv")}</span>
               {isLoadingRating ? (
-                <div>Chargement de la note...</div>
+                <div>{t("worker.workerNoCv")}</div>
               ) : (
                 <div>
                   {typeof worker.averageRating === "string" ? (

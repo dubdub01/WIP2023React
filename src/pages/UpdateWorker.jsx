@@ -10,12 +10,16 @@ import AuthAPI from "../services/AuthAPI";
 import { BASE_URL } from "../config";
 import SkillsAPI from "../services/SkillsAPI";
 import Select from "react-select";
+import { useTranslation } from "react-i18next";
+
 
 const UpdateWorker = () => {
   const navigate = useNavigate();
   const { id } = useParams(); // Obtenez l'ID du travailleur depuis l'URL
   const [skills, setSkills] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState("");
+  const { t, i18n } = useTranslation();
+
 
   const [worker, setWorker] = useState({
     firstname: "",
@@ -53,13 +57,14 @@ const UpdateWorker = () => {
       console.error("Erreur lors de la récupération des compétences:", error);
     }
   };
+  
 
   const fetchWorkerData = async () => {
     try {
       const response = await Axios.get(`${WORKERS_API}/${id}`);
       const workerData = response.data;
       const workerSkillsIRI = workerData.skills.map((skill) => `/api/skills/${skill.id}`);
-      
+      console.log(workerData.user.id);
       // Utilisez {} pour envelopper les propriétés de l'objet
       setWorker({
         ...workerData,
@@ -138,8 +143,8 @@ const UpdateWorker = () => {
   return (
     <div className="container mx-auto p-4">
       {/* {wskills} */}
-      <h1 className="text-3xl font-semibold mb-4">
-        Mettre à jour le travailleur
+      <h1 className="text-3xl font-semibold mb-4 text-white">
+      {t("updateWorker.titre")}
       </h1>
       <form
         onSubmit={handleSubmit}
@@ -149,8 +154,8 @@ const UpdateWorker = () => {
           <div className="md:w-1/2 px-3 mb-6 md:mb-0">
             <Field
               name="firstname"
-              label="Prénom"
-              placeholder="Prénom du travailleur"
+              label={t("newWorkerPage.firstNameLabel")}
+              placeholder={t("newWorkerPage.firstNamePlace")}
               value={worker.firstname}
               onChange={handleChange}
               error={errors.firstname}
@@ -159,8 +164,8 @@ const UpdateWorker = () => {
           <div className="md:w-1/2 px-3">
             <Field
               name="lastname"
-              label="Nom"
-              placeholder="Nom du travailleur"
+              label={t("newWorkerPage.name")}
+              placeholder={t("newWorkerPage.firstNamePlace")}
               value={worker.lastname}
               onChange={handleChange}
               error={errors.lastname}
@@ -172,7 +177,7 @@ const UpdateWorker = () => {
             <Field
               name="gender"
               label="Genre"
-              placeholder="Genre du travailleur"
+              placeholder={t("newWorkerPage.genre")}
               value={worker.gender}
               onChange={handleChange}
               error={errors.gender}
@@ -182,8 +187,8 @@ const UpdateWorker = () => {
         <div className="mb-6">
           <Field
             name="description"
-            label="Description"
-            placeholder="Description du travailleur"
+            label={t("newWorkerPage.description")}
+            placeholder={t("newWorkerPage.descriptionPlace")}
             value={worker.description}
             onChange={handleChange}
             error={errors.description}
@@ -191,7 +196,7 @@ const UpdateWorker = () => {
         </div>
 
         <div className="mb-6">
-          <label className="block text-gray-700 mb-2">Compétences :</label>
+          <label className="block text-gray-700 mb-2">{t("newWorkerPage.competence")}</label>
           <Select
             isMulti
             name="skills"
@@ -202,12 +207,12 @@ const UpdateWorker = () => {
             options={skills.map((skill) => ({
               value: skill.id,
               label: skill.name,
-            }))}
+            }))}         
           />
         </div>
 
         <div className="mb-6">
-          <label className="block text-gray-700 mb-2">Visibilité :</label>
+          <label className="block text-gray-700 mb-2">{t("newCompanyPage.visibilité")}</label>
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -216,7 +221,7 @@ const UpdateWorker = () => {
               checked={worker.visibility}
               onChange={handleChange}
             />
-            <label className="ml-2 text-gray-700">Visible</label>
+            <label className="ml-2 text-gray-700">{t("newCompanyPage.visible")}</label>
           </div>
         </div>
 
@@ -225,13 +230,13 @@ const UpdateWorker = () => {
             type="submit"
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
-            Enregistrer les modifications
+            {t("newCompanyPage.enregistrer")}
           </button>
           <Link
             to="/workers"
             className="text-gray-500 font-bold hover:text-gray-700"
           >
-            Annuler
+            {t("newCompanyPage.retour")}
           </Link>
         </div>
       </form>

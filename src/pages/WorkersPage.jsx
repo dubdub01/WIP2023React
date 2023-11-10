@@ -157,8 +157,8 @@ const WorkersPage = () => {
     );
   } else if (filteredWorkers.length === 0) {
     content = (
-      <div className="text-gray-600 text-center">
-        Aucun travailleur ne correspond à votre recherche...
+      <div className="text-white text-center">
+        {t("workers.noWorker")}
       </div>
     );
   } else {
@@ -174,13 +174,13 @@ const WorkersPage = () => {
               {worker.firstname} {worker.lastname}
             </h5>
             <p className="text-gray-600">
-              <strong>Genre:</strong> {worker.gender}
+              <strong>{t("worker.workerGenre")}</strong> {worker.gender}
             </p>
             <p className="text-gray-600">
-              <strong>Date de naissance:</strong> {formatDate(worker.age)}
+              <strong>{t("worker.workerDate")}</strong> {formatDate(worker.age)}
             </p>
             <p className="text-gray-600">
-              <strong>Compétences:</strong>
+              <strong>{t("worker.workerCompétence")}</strong>
             </p>
             <ul className="list-disc list-inside text-gray-600">
               {worker.skills.map((skill, index) => (
@@ -189,7 +189,7 @@ const WorkersPage = () => {
             </ul>
             <div className="mt-4">
               {worker.ratings.length === 0 ? (
-                <div>ce travailleur n'a aucune note pour le moment</div>
+                <div>{t("workers.noNotes")}</div>
               ) : (
                 <RatingStars
                   averageRating={calculateAverageRating(worker.ratings)}
@@ -204,7 +204,7 @@ const WorkersPage = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-white text-3xl font-semibold mb-4">Liste des Travailleurs</h1>
+      <h1 className="text-white text-3xl font-semibold mb-4">{t("workers.List")}</h1>
       {/* Afficher le message de chargement initial si isLoading est vrai */}
 
       <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mb-4">
@@ -212,7 +212,7 @@ const WorkersPage = () => {
           <input
             type="text"
             className="border rounded-md p-2 w-full"
-            placeholder="Rechercher par nom"
+            placeholder={t("workers.workerSearch")}
             value={search}
             onChange={handleSearch}
           />
@@ -224,7 +224,7 @@ const WorkersPage = () => {
               (option) => option.value === selectedSkill
             )}
             onChange={handleSkillChange}
-            placeholder="Toutes les compétences"
+            placeholder={t("workers.workerSkills")}
             isClearable={isClearable}
           />
         </div>

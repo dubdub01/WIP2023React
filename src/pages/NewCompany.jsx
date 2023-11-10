@@ -10,6 +10,7 @@ import Axios from "axios";
 import AuthAPI from "../services/AuthAPI";
 import ProvincesAPI from "../services/ProvincesAPI";
 import { COMPANIES_API } from "../config";
+import { useTranslation } from "react-i18next";
 
 const NewCompany = () => {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ const NewCompany = () => {
   const [provinces, setProvinces] = useState([]);
   const [selectedProvinces, setSelectedProvinces] = useState("");
   const [newProvinces, setNewProvinces] = useState([""]);
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     fetchSectors();
@@ -102,7 +104,7 @@ const NewCompany = () => {
 
   const handleSectorChange = (selectedOptions) => {
     const selectedSectors = selectedOptions.map(
-      (option) => `/api/sectors/${option.value}`
+      (option) => `/api/sectors/${option.id}`
     );
     setCompany({ ...company, sector: selectedSectors });
   };
@@ -146,9 +148,17 @@ const NewCompany = () => {
     }
   };
 
+  const sectorOptions = sectors.map((sector) => ({
+    value: sector.name,
+    label: t(`sectors.${sector.name}`),
+    id: sector.id,
+  }));
+
+  console.log(sectorOptions);
+
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-semibold mb-4">Créer une entreprise</h1>
+      <h1 className="text-3xl font-semibold mb-4 text-white">{t("newCompanyPage.titre")}</h1>
       <form
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
@@ -157,8 +167,8 @@ const NewCompany = () => {
           <div className="md:w-1/2 px-3 mb-6 md:mb-0">
             <Field
               name="name"
-              label="Nom"
-              placeholder="Nom de l'entreprise"
+              label={t("newCompanyPage.nameLabel")}
+              placeholder={t("newCompanyPage.namePlace")}
               value={company.name}
               onChange={handleChange}
               error={errors.name}
@@ -169,7 +179,7 @@ const NewCompany = () => {
             <Field
               name="eMail"
               label="Email"
-              placeholder="Email de l'entreprise"
+              placeholder={t("newCompanyPage.email")}
               value={company.eMail}
               onChange={handleChange}
               error={errors.eMail}
@@ -179,24 +189,22 @@ const NewCompany = () => {
         <div className="mb-6">
           <Field
             name="description"
-            label="Description"
-            placeholder="Description de l'entreprise"
+            label={t("newCompanyPage.descriptionLabel")}
+            placeholder={t("newCompanyPage.description")}
             value={company.description}
             onChange={handleChange}
             error={errors.description}
           />
         </div>
         <div className="mb-6">
-          <label className="block text-gray-700 mb-2">Secteurs :</label>
+          <label className="block text-gray-700 mb-2">{t("companiesPage.secteurs")}
+</label>
           {newSectors.map((newSector, index) => (
             <div className="input-group mb-3" key={index}>
               <Select
                 isMulti
                 name="sectors"
-                options={sectors.map((sector) => ({
-                  value: sector.id,
-                  label: sector.name,
-                }))}
+                options={sectorOptions}
                 onChange={handleSectorChange}
                 className="basic-multi-select"
                 classNamePrefix="select"
@@ -205,7 +213,7 @@ const NewCompany = () => {
           ))}
         </div>
         <div className="mb-6">
-          <label className="block text-gray-700 mb-2">Province :</label>
+          <label className="block text-gray-700 mb-2">{t("companiesPage.provinces")}</label>
           {newProvinces.map((newProvince, index) => (
             <div className="input-group mb-3" key={index}>
               <Select
@@ -222,7 +230,7 @@ const NewCompany = () => {
           ))}
         </div>
         <div className="mb-6">
-          <label className="block text-gray-700 mb-2">Visibilité :</label>
+          <label className="block text-gray-700 mb-2">{t("newCompanyPage.visibilité")}</label>
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -231,7 +239,7 @@ const NewCompany = () => {
               checked={company.visibility}
               onChange={handleChange}
             />
-            <label className="ml-2 text-gray-700">Visible</label>
+            <label className="ml-2 text-gray-700">{t("newCompanyPage.visible")}</label>
           </div>
         </div>
 
@@ -240,13 +248,13 @@ const NewCompany = () => {
             type="submit"
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
-            Enregistrer
+            {t("newCompanyPage.enregistrer")}
           </button>
           <Link
             to="/companies"
             className="text-gray-500 font-bold hover:text-gray-700"
           >
-            Retour à la liste
+            {t("newCompanyPage.retour")}
           </Link>
         </div>
       </form>

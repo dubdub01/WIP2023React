@@ -3,8 +3,8 @@
     "title1": "Bienvenue sur",
     "title2":"Work in Progress !",
     "presentation": "WIP est une plateforme en ligne qui facilite la mise en relation entre les entreprises et les talents. Que vous soyez une entreprise à la recherche de professionnels qualifiés ou un travailleur indépendant en quête d'opportunités, WIP est là pour vous aider à trouver les bonnes personnes.",
-    "boutonCompanies": "Découvrir nos Companies",
-    "boutonWorkers": "Découvrir nos Workers",
+    "boutonCompanies": "Découvrir nos Entreprises",
+    "boutonWorkers": "Découvrir nos Travailleurs",
     "apropos": {
       "text1": "Découvrir nos Workers",
       "text2": "Notre objectif est de simplifier le processus de recrutement et de collaboration en offrant un espace où les entreprises peuvent trouver les talents dont elles ont besoin et où les travailleurs indépendants peuvent trouver des opportunités professionnelles.",
@@ -220,5 +220,109 @@
     "password": "Mot de passe",
     "passwordBox": "Mot de passe de connexion",
     "connexion": "Connexion"
+  },
+  "companiesPage":{
+    "nothing":"Aucune entreprise ne correspond à votre recherche...",
+    "secteurs":"Secteurs :",
+    "provinces":"Province :",
+    "nameSearch":"Recherche par nom :",
+    "sectorSearch":"Recherche par secteur :"
+  },
+  "companyPage":{
+    "description" : "Description :",
+    "secteurs" :"Secteurs :"
+  },
+  "newCompanyPage":{
+    "titre" : "Créer une entreprise",
+    "nameLabel": "Nom",
+    "namePlace": "Nom de l'entreprise",
+    "email" : "Email de l'entreprise",
+    "descriptionLabel" : "Description",
+    "description" : "Description de l'entreprise",
+    "visibilité": "visibilité :",
+    "visible": "Visible",
+    "enregistrer": "Enregistrer",
+    "retour": "Retour à la liste"
+  },
+  "newWorkerPage":{
+    "titre": "Créer un travailleur",
+    "firstNameLabel": "Prénom",
+    "firstNamePlace": "Prénom du travailleur",
+    "name": "Prénom",
+    "nameLabel": "Nom du travailleur",
+    "date": "Date de naissance",
+    "genre": "Denre du travailleur",
+    "description": "Description",
+    "descriptionPlace": "Description du travailleur",
+    "competence": "Compétences :"
+  },
+  "updateCompany":{
+    "titre": "Modifier une entreprise"
+  },
+  "updateWorker":{
+    "titre": "Modifier un travailleur"
+  },
+  "upload": {
+    "titre":"Ajouter un CV",
+    "cvLabel":"Sélectionnez un fichier PDF pour le CV :",
+    "cvAdd":"Ajouter un CV",
+    "annuler":"Annuler"
+  },
+  "uploadImage": {
+    "titre":"Ajouter une image",
+    "imageLabel":"Logo de l'entreprise",
+    "imageAdd":"Ajouter une image",
+    "annuler":"Annuler"
+  },
+  "user":{
+    "chargement" : "Chargement en cours...",
+    "info" : "Informations de l'utilisateur",
+    "newWorker" : "Créer un travailleur",
+    "newCompany" : "Créer une entreprise",
+    "userUsername": "Nom d'utilisateur :",
+    "userMail": "Adresse e-mail :",
+    "userContacted": "Utilisateurs contactés",
+    "noUserContacted": "Aucun utilisateur contacté.",
+    "note": "Note :",
+    "userNote": "Créer une note",
+    "userCompany": "Entreprises associées",
+    "userProvince": "Province :",
+    "userSector": "Secteurs :",
+    "userModifyCompany": "Modifier",
+    "userAddImage": "Ajouter une image",
+    "userNoCompany": "Aucune entreprise associée.",
+    "userWorker": "Travailleurs associés",
+    "userDate": "Date de naissance :",
+    "userGenre": "Genre :",
+    "userDescription": "Description :",
+    "userCvFrom": "CV de",
+    "userWorkerUpdate": "Modifier",
+    "userWorkerAddCv": "ajouter cv",
+    "userWorkerDelete": "Supprimer",
+    "userWorkerdelConfirm": "Confirmer la suppression ?",
+    "userWorkerdelConfirmYes": "Oui",
+    "userWorkerdelConfirmNo": "Annuler",
+    "userNoWorker": "Aucun travailleur associé."
+  },
+  "worker":{
+    "workerGenre": "Genre:",
+    "workerDate": "Date de naissance:",
+    "workerDescription": "Description:",
+    "workerCompétence": "Compétences:",
+    "workerNoCv": "Le travailleur n'a pas de CV",
+    "workerNote": "Note moyenne:",
+    "workerNoteDl": "Chargement de la note..."
+  },
+  "workers":{
+    "noWorker": "Aucun travailleur ne correspond à votre recherche...",
+    "noNotes": "Ce travailleur n'a aucune note pour le moment",
+    "List": "Liste des travailleurs",
+    "workerSearch": "Rechercher par nom",
+    "workerSkills": "Toutes les compétences"
   }
+  
+
+
+
+
 }

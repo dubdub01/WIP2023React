@@ -10,6 +10,8 @@ import AuthAPI from "../services/AuthAPI";
 import { BASE_URL } from "../config";
 import SkillsAPI from "../services/SkillsAPI";
 import Select from "react-select";
+import { useTranslation } from "react-i18next";
+
 
 const NewWorker = () => {
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ const NewWorker = () => {
   const [skills, setSkills] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState("");
   const [newSkills, setNewSkills] = useState([""]);
+  const { t, i18n } = useTranslation();
   const [individualSelectedSkills, setIndividualSelectedSkills] = useState(
     newSkills.map(() => [])
   );
@@ -99,9 +102,15 @@ const NewWorker = () => {
   };
 
   const handleSkillChange = (selectedOptions) => {
-    const selectedSkills = selectedOptions.map((option) => `/api/skills/${option.value}`);
+    const selectedSkills = selectedOptions.map((option) => `/api/skills/${option.id}`);
     setWorker({ ...worker, skills: selectedSkills });
   };
+
+  const skillOptions = skills.map((skill) => ({
+    value: skill.name,
+    label: t(`skills.${skill.name}`),
+    id: skill.id,
+  }));
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -133,10 +142,12 @@ const NewWorker = () => {
       toast.error("Une erreur est survenue");
     }
   };
+  console.log(worker.skills);
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-semibold mb-4">Créer un travailleur</h1>
+      <h1 className="text-3xl font-semibold mb-4 text-white">{t("newWorkerPage.titre")}
+</h1>
       <form
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
@@ -145,8 +156,8 @@ const NewWorker = () => {
           <div className="md:w-1/2 px-3 mb-6 md:mb-0">
             <Field
               name="firstname"
-              label="Prénom"
-              placeholder="Prénom du travailleur"
+              label={t("newWorkerPage.firstNameLabel")}
+              placeholder={t("newWorkerPage.firstNamePlace")}
               value={worker.firstname}
               onChange={handleChange}
               error={errors.firstname}
@@ -155,8 +166,8 @@ const NewWorker = () => {
           <div className="md:w-1/2 px-3">
             <Field
               name="lastname"
-              label="Nom"
-              placeholder="Nom du travailleur"
+              label={t("newWorkerPage.name")}
+              placeholder={t("newWorkerPage.firstNamePlace")}
               value={worker.lastname}
               onChange={handleChange}
               error={errors.lastname}
@@ -168,7 +179,7 @@ const NewWorker = () => {
             <Field
               type="date"
               name={"age"}
-              label={"Date"}
+              label={t("newWorkerPage.date")}
               placeholder={"Date du travailleur"}
               value={worker.age}
               onChange={handleChange}
@@ -179,7 +190,7 @@ const NewWorker = () => {
             <Field
               name="gender"
               label="Genre"
-              placeholder="Genre du travailleur"
+              placeholder={t("newWorkerPage.genre")}
               value={worker.gender}
               onChange={handleChange}
               error={errors.gender}
@@ -189,8 +200,8 @@ const NewWorker = () => {
         <div className="mb-6">
           <Field
             name="description"
-            label="Description"
-            placeholder="Description du travailleur"
+            label={t("newWorkerPage.description")}
+            placeholder={t("newWorkerPage.descriptionPlace")}
             value={worker.description}
             onChange={handleChange}
             error={errors.description}
@@ -198,17 +209,13 @@ const NewWorker = () => {
         </div>
 
         <div className="mb-6">
-      <label className="block text-gray-700 mb-2">Compétences :</label>
+      <label className="block text-gray-700 mb-2">{t("newWorkerPage.competence")}</label>
       {newSkills.map((newSkill, index) => (
         <div className="input-group mb-3" key={index}>
           <Select
             isMulti
             name="skills"
-            options={skills.map((skill) => ({
-              value: skill.id,
-              label: skill.name,
-            }))}
-            
+            options={skillOptions}            
             onChange={handleSkillChange}
             className="basic-multi-select"
             classNamePrefix="select"
@@ -218,7 +225,7 @@ const NewWorker = () => {
     </div>
         <div className="mb-6">
           <label className="block text-gray-700 mb-2">
-            Visibilité :
+          {t("newCompanyPage.visibilité")}
           </label>
           <div className="flex items-center">
             <input
@@ -228,7 +235,7 @@ const NewWorker = () => {
               checked={worker.visibility}
               onChange={handleChange}
             />
-            <label className="ml-2 text-gray-700">Visible</label>
+            <label className="ml-2 text-gray-700">{t("newCompanyPage.visible")}</label>
           </div>
         </div>
 
@@ -237,13 +244,13 @@ const NewWorker = () => {
             type="submit"
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
-            Enregistrer
+            {t("newCompanyPage.enregistrer")}
           </button>
           <Link
             to="/workers"
             className="text-gray-500 font-bold hover:text-gray-700"
           >
-            Retour à la liste
+            {t("newCompanyPage.retour")}
           </Link>
         </div>
       </form>

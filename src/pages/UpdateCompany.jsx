@@ -7,6 +7,8 @@ import { COMPANIES_API } from "../config";
 import SectorsAPI from "../services/SectorsAPI";
 import Select from "react-select";
 import ProvincesAPI from "../services/ProvincesAPI";
+import { useTranslation } from "react-i18next";
+
 
 const UpdateCompany = () => {
   const navigate = useNavigate();
@@ -15,6 +17,8 @@ const UpdateCompany = () => {
   const [selectedSectors, setSelectedSectors] = useState("");
   const [provinces, setProvinces] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState("");
+  const { t, i18n } = useTranslation();
+
 
   const [company, setCompany] = useState({
     name: "",
@@ -109,7 +113,7 @@ const UpdateCompany = () => {
 
   const handleSectorChange = (selectedOptions) => {
     const selectedSectors = selectedOptions.map(
-      (option) => `/api/sectors/${option.value}`
+      (option) => `/api/sectors/${option.id}`
     );
     console.log(selectedOptions);
     setSelectedSectors(selectedOptions);
@@ -126,6 +130,12 @@ const UpdateCompany = () => {
 
     setSelectedProvince(selectedOption); // Mettez à jour l'état selectedProvince
   };
+
+  const sectorOptions = sectors.map((sector) => ({
+    value: sector.name,
+    label: t(`sectors.${sector.name}`),
+    id: sector.id,
+  }));
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -159,7 +169,7 @@ const UpdateCompany = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-semibold mb-4">Créer une entreprise</h1>
+      <h1 className="text-3xl font-semibold mb-4 text-white">{t("updateCompany.titre")}</h1>
       <form
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
@@ -168,8 +178,8 @@ const UpdateCompany = () => {
           <div className="md:w-1/2 px-3 mb-6 md:mb-0">
             <Field
               name="name"
-              label="Nom"
-              placeholder="Nom de l'entreprise"
+              label={t("newCompanyPage.nameLabel")}
+              placeholder={t("newCompanyPage.namePlace")}
               value={company.name}
               onChange={handleChange}
               error={errors.name}
@@ -181,7 +191,7 @@ const UpdateCompany = () => {
             <Field
               name="eMail"
               label="Email"
-              placeholder="Email de l'entreprise"
+              placeholder={t("newCompanyPage.email")}
               value={company.eMail}
               onChange={handleChange}
               error={errors.eMail}
@@ -191,15 +201,15 @@ const UpdateCompany = () => {
         <div className="mb-6">
           <Field
             name="description"
-            label="Description"
-            placeholder="Description de l'entreprise"
+            label={t("newCompanyPage.descriptionLabel")}
+            placeholder={t("newCompanyPage.description")}
             value={company.description}
             onChange={handleChange}
             error={errors.description}
           />
         </div>
         <div className="mb-6">
-          <label className="block text-gray-700 mb-2">Secteurs :</label>
+          <label className="block text-gray-700 mb-2">{t("companiesPage.secteurs")}</label>
           <Select
             isMulti
             name="sectors"
@@ -207,14 +217,11 @@ const UpdateCompany = () => {
             className="basic-multi-select"
             classNamePrefix="select"
             value={selectedSectors}
-            options={sectors.map((sector) => ({
-              value: sector.id,
-              label: sector.name,
-            }))}
+            options={sectorOptions}
           />
         </div>
         <div className="mb-6">
-          <label className="block text-gray-700 mb-2">Province :</label>
+          <label className="block text-gray-700 mb-2">{t("companiesPage.provinces")}</label>
 
           <Select
             name="provinceName"
@@ -229,7 +236,7 @@ const UpdateCompany = () => {
           />
         </div>
         <div className="mb-6">
-          <label className="block text-gray-700 mb-2">Visibilité :</label>
+          <label className="block text-gray-700 mb-2">{t("newCompanyPage.visibilité")}</label>
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -238,7 +245,7 @@ const UpdateCompany = () => {
               checked={company.visibility}
               onChange={handleChange}
             />
-            <label className="ml-2 text-gray-700">Visible</label>
+            <label className="ml-2 text-gray-700">{t("newCompanyPage.visible")}</label>
           </div>
         </div>
 
@@ -247,13 +254,13 @@ const UpdateCompany = () => {
             type="submit"
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
-            Enregistrer
+            {t("newCompanyPage.enregistrer")}
           </button>
           <Link
             to="/companies"
             className="text-gray-500 font-bold hover:text-gray-700"
           >
-            Retour à la liste
+            {t("newCompanyPage.retour")}
           </Link>
         </div>
       </form>

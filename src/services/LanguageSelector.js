@@ -19,7 +19,7 @@ const LanguageSelector = () => {
           onClick={() => setShowDropdown(!showDropdown)}
           className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded focus:outline-none"
         >
-          {selectedLanguage === "en" ? "English" : "Français"}
+          {selectedLanguage === "en" ? "English" : selectedLanguage === "fr" ? "Français" : "Nederlands"}
           <svg
             className="-mr-1 ml-2 h-5 w-5"
             xmlns="http://www.w3.org/2000/svg"
@@ -53,6 +53,13 @@ const LanguageSelector = () => {
               role="menuitem"
             >
               Français
+            </button>
+            <button
+              onClick={() => changeLanguage("nl")}
+              className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              role="menuitem"
+            >
+              Neederlands
             </button>
             {/* Ajoutez des boutons pour d'autres langues si nécessaire */}
           </div>

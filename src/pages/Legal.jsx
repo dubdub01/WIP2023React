@@ -2,7 +2,8 @@ const Legal = (props) => {
     return (
         <>
 
-<div className="container">
+<div class="container mx-auto p-8">
+<div className="bg-white shadow-md rounded-md p-6">
 
 	<h2>Définitions</h2>
 	{/* <p>
@@ -378,6 +379,7 @@ const Legal = (props) => {
 		<a href="http://wip.duboismax.com/">http://wip.duboismax.com/</a>
 		est soumis au droit français. 
 			                En dehors des cas où la loi ne le permet pas, il est fait attribution exclusive de juridiction aux tribunaux compétents de Nivelles</p>
+	</div>
 	</div>
 
         </>

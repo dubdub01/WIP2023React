@@ -1,13 +1,14 @@
 {
   "homepage": {
-    "title": "Welcome to WIP - Work in Progress!",
-    "presentation": "WIP is an online platform that facilitates the connection between companies and talents. Whether you're a company looking for qualified professionals or an independent worker seeking opportunities, WIP is here to help you find the right people.",
+    "title1": "Welcome to",
+    "title2": "Work in Progress!",
+    "presentation": "WIP is an online platform that facilitates connections between companies and talents. Whether you're a company looking for qualified professionals or a freelancer seeking opportunities, WIP is here to help you find the right people.",
     "boutonCompanies": "Discover our Companies",
     "boutonWorkers": "Discover our Workers",
     "apropos": {
-      "text1": "Discover our Workers",
-      "text2": "Our goal is to simplify the recruitment and collaboration process by providing a space where companies can find the talent they need and where independent workers can find professional opportunities.",
-      "text3": "WIP offers a wide range of sectors and skills, allowing companies to find the best talent for their projects. Independent workers can create a detailed profile, showcase their skills and experience, and be contacted directly by interested companies."
+    "text1": "Discover our Workers",
+    "text2": "Our goal is to simplify the recruitment and collaboration process by providing a space where companies can find the talent they need and where freelancers can find professional opportunities.",
+    "text3": "WIP offers a wide range of sectors and skills, allowing companies to find the best talent for their projects. Freelancers can create a detailed profile, showcase their skills and experience, and be contacted directly by interested companies."
     }
   },
   "navbar": {
@@ -219,5 +220,105 @@
     "password": "Password",
     "passwordBox": "Your Password",
     "connexion": "Connexion"
-  }
+  },
+  "companiesPage": {
+    "nothing": "No companies match your search...",
+    "secteurs": "Sectors:",
+    "provinces": "Province:",
+    "nameSearch": "Search by name:",
+    "sectorSearch": "Search by sector:"
+},
+
+  "companyPage":{
+    "description" : "Description:",
+    "secteurs" : "Sectors:"
+  },
+  "newCompanyPage": {
+    "titre": "Create a company",
+    "nameLabel": "Name",
+    "namePlace": "Company name",
+    "email": "Company email",
+    "descriptionLabel": "Description",
+    "description": "Company description",
+    "visibilité": "Visibility:",
+    "visible": "Visible",
+    "enregistrer": "Save",
+    "retour": "Back to list"
+  },
+  "newWorkerPage": {
+    "titre": "Create a worker",
+    "firstNameLabel": "First Name",
+    "firstNamePlace": "Worker's First Name",
+    "name": "First Name",
+    "nameLabel": "Worker's Last Name",
+    "date": "Date of Birth",
+    "genre": "Worker's Gender",
+    "description": "Description",
+    "descriptionPlace": "Worker's Description",
+    "competence": "Skills:"
+},
+"updateCompany": {
+    "titre": "Edit a company"
+},
+"updateWorker": {
+    "titre": "Edit a worker"
+},
+"upload": {
+    "titre": "Add a CV",
+    "cvLabel": "Select a PDF file for the CV:",
+    "cvAdd": "Add CV",
+    "annuler": "Cancel"
+},
+"uploadImage": {
+    "titre": "Add an image",
+    "imageLabel": "Company Logo",
+    "imageAdd": "Add an image",
+    "annuler": "Cancel"
+},
+"user": {
+    "chargement": "Loading...",
+    "info": "User Information",
+    "newWorker": "Create a worker",
+    "newCompany": "Create a company",
+    "userUsername": "Username:",
+    "userMail": "Email Address:",
+    "userContacted": "Contacted Users",
+    "noUserContacted": "No users contacted.",
+    "note": "Rating:",
+    "userNote": "Create a note",
+    "userCompany": "Associated Companies",
+    "userProvince": "Province:",
+    "userSector": "Sectors:",
+    "userModifyCompany": "Edit",
+    "userAddImage": "Add an image",
+    "userNoCompany": "No associated companies.",
+    "userWorker": "Associated Workers",
+    "userDate": "Date of Birth:",
+    "userGenre": "Gender:",
+    "userDescription": "Description:",
+    "userCvFrom": "CV of",
+    "userWorkerUpdate": "Edit",
+    "userWorkerAddCv": "Add CV",
+    "userWorkerDelete": "Delete",
+    "userWorkerdelConfirm": "Confirm deletion?",
+    "userWorkerdelConfirmYes": "Yes",
+    "userWorkerdelConfirmNo": "Cancel",
+    "userNoWorker": "No associated workers."
+},
+"worker": {
+    "workerGenre": "Gender:",
+    "workerDate": "Date of Birth:",
+    "workerDescription": "Description:",
+    "workerCompétence": "Skills:",
+    "workerNoCv": "The worker has no CV",
+    "workerNote": "Average Rating:",
+    "workerNoteDl": "Loading rating..."
+},
+"workers": {
+    "noWorker": "No workers match your search...",
+    "noNotes": "This worker has no ratings at the moment",
+    "List": "Worker List",
+    "workerSearch": "Search by name",
+    "workerSkills": "All skills"
+}
 }

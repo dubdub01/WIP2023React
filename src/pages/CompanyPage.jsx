@@ -5,10 +5,14 @@ import { toast } from "react-toastify";
 import DeleteConfirmation from "../components/DeleteConfirmation";
 import { BASE_URL } from "../config";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
+
 
 const CompanyPage = () => {
   const { id = "new" } = useParams();
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
 
   const [company, setCompany] = useState({
     name: "",
@@ -51,16 +55,18 @@ const CompanyPage = () => {
 
   return (
     <div className="container mx-auto p-4">
-    <div className="bg-white shadow-md rounded-md p-6">
+      <div className="bg-white shadow-md rounded-md p-6">
         <h1 className="text-3xl font-semibold mb-4">{company.name}</h1>
         <div className="flex flex-wrap">
           <div className="w-full md:w-1/2">
             <p className="mb-4">{company.e_mail}</p>
           </div>
           <div className="w-full md:w-1/2">
-            <h5 className="text-lg font-semibold mb-2">Description :</h5>
+            <h5 className="text-lg font-semibold mb-2">
+              {t("companiesPage.description")}
+            </h5>
             <p className="mb-4">{company.description}</p>
-            <h5 className="text-lg font-semibold mb-2">Secteurs :</h5>
+            <h5 className="text-lg font-semibold mb-2">{t("companyPage.secteurs")}</h5>
             <ul className="list-disc list-inside mb-4">
               {company.sector.map((sector, index) => (
                 <li key={index}>{sector.name}</li>
@@ -71,22 +77,6 @@ const CompanyPage = () => {
               alt={`Couverture de ${company.name}`}
               className="w-full rounded"
             />
-
-            <div className="mt-6">
-              <button
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition duration-300"
-                onClick={() => setShowConfirmation(true)}
-              >
-                Supprimer
-              </button>
-
-              {showConfirmation && (
-                <DeleteConfirmation
-                  onConfirm={handleDelete}
-                  onCancel={() => setShowConfirmation(false)}
-                />
-              )}
-            </div>
           </div>
         </div>
       </div>

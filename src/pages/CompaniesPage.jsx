@@ -70,13 +70,13 @@ const CompaniesPage = (props) => {
 
   const handlesectorChange = (selectedOption) => {
     setIsClearable(true); // Toujours autoriser la suppression (clearable)
-    
+
     if (selectedOption === null) {
       setSelectedSector(""); // Réinitialisation de la compétence sélectionnée
     } else {
       setSelectedSector(selectedOption.value);
     }
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -103,54 +103,54 @@ const CompaniesPage = (props) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
           {Array.from({ length: 9 }).map((_, index) => (
             <div className="block bg-teal-400 border rounded-md p-4 shadow-md mb-4 hover:scale-105 transform transition-transform duration-300">
-            <div className="animate-pulse flex space-x-4">
-              <div className="flex-1 space-y-6 py-1">
-                <div className="h-2 bg-white rounded"></div>
-                <div className="space-y-3">
+              <div className="animate-pulse flex space-x-4">
+                <div className="flex-1 space-y-6 py-1">
+                  <div className="h-2 bg-white rounded"></div>
+                  <div className="space-y-3">
+                    <div className="h-2 bg-white rounded"></div>
+                  </div>
+                  <div className="h-2 bg-white rounded"></div>
                   <div className="h-2 bg-white rounded"></div>
                 </div>
-                <div className="h-2 bg-white rounded"></div>
-                <div className="h-2 bg-white rounded"></div>
               </div>
             </div>
-          </div>
           ))}
         </div>
       </div>
     );
   } else if (filteredCompanies.length === 0) {
     content = (
-      <div className="text-gray-600 text-center">
-        Aucune entreprise ne correspond à votre recherche...
-      </div>
+      <div className="text-white text-center">{t("companiesPage.nothing")}</div>
     );
   } else {
     content = (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
         {paginatedCompanies.map((company) => (
           <Link
-          to={`/companies/${company.id}`}
-            className="bg-white border rounded-md p-4 shadow-md mb-4 hover:scale-105 transform transition-transform duration-300">
-              <img
-                src={`${BASE_URL}uploads/images/${company.cover}`}
-                alt={`Couverture de ${company.name}`}
-                className="w-full h-auto mb-4"
-              />
-              <h5 className="text-xl font-semibold mb-2">
-                <Link to={`/companies/${company.id}`}>{company.name}</Link>
-              </h5>
-              <p className="text-gray-600 mb-2">{company.description}</p>
-              <p className="text-gray-600 mb-2">
-                <strong>Secteurs :</strong>
-              </p>
-              <ul className="list-disc list-inside text-gray-600 mb-2">
-                {company.sector.map((sector, index) => (
-                  <li key={index}>{t(`sectors.${sector.name}`)}</li>                ))}
-              </ul>
-              <p className="text-gray-600">
-                <strong>Province :</strong> {company.provinceName.name}
-              </p>
-            </Link>
+            to={`/companies/${company.id}`}
+            className="bg-white border rounded-md p-4 shadow-md mb-4 hover:scale-105 transform transition-transform duration-300"
+          >
+            <img
+              src={`${BASE_URL}uploads/images/${company.cover}`}
+              alt={`Couverture de ${company.name}`}
+              className="w-full h-auto mb-4"
+            />
+            <h5 className="text-xl font-semibold mb-2">
+              <Link to={`/companies/${company.id}`}>{company.name}</Link>
+            </h5>
+            <p className="text-gray-600 mb-2">{company.description}</p>
+            <p className="text-gray-600 mb-2">
+              <strong>{t("companiesPage.secteurs")}</strong>
+            </p>
+            <ul className="list-disc list-inside text-gray-600 mb-2">
+              {company.sector.map((sector, index) => (
+                <li key={index}>{t(`sectors.${sector.name}`)}</li>
+              ))}
+            </ul>
+            <p className="text-gray-600">
+              <strong>{t("companiesPage.provinces")}</strong> {company.provinceName.name}
+            </p>
+          </Link>
         ))}
       </div>
     );
@@ -158,7 +158,9 @@ const CompaniesPage = (props) => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-semibold mb-4">Liste des entreprises</h1>
+      <h1 className="text-3xl font-semibold mb-4 text-white">
+        Liste des entreprises
+      </h1>
       {/* Afficher le message de chargement initial si isLoading est vrai */}
 
       <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mb-4">
@@ -166,19 +168,21 @@ const CompaniesPage = (props) => {
           <input
             type="text"
             className="border rounded-md p-2 w-full"
-            placeholder="Rechercher par nom"
+            placeholder={t("companiesPage.nameSearch")}
             value={search}
             onChange={handleSearch}
           />
         </div>
         <div className="flex-grow">
-        <Select
-        options={sectorOptions}
-        value={sectorOptions.find((option) => option.value === selectedSector)}
-        onChange={handlesectorChange}
-        placeholder="Toutes les compétences"
-        isClearable={isClearable}
-      />
+          <Select
+            options={sectorOptions}
+            value={sectorOptions.find(
+              (option) => option.value === selectedSector
+            )}
+            onChange={handlesectorChange}
+            placeholder={t("companiesPage.sectorSearch")}
+            isClearable={isClearable}
+          />
         </div>
       </div>
 

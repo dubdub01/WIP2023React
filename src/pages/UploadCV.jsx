@@ -6,10 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 
+
 const UploadCV = () => {
     const { id } = useParams();
     const navigate = useNavigate();
   const [cv, setCv] = useState(null);
+  const { t, i18n } = useTranslation();
+
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -39,14 +42,15 @@ const UploadCV = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-semibold mb-4">Ajouter un CV</h1>
+      <h1 className="text-3xl font-semibold mb-4 text-white">{t("upload.titre")}
+</h1>
       <form
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
         <div className="mb-6">
           <label htmlFor="cv" className="block text-gray-700 mb-2">
-            Sélectionnez un fichier PDF pour le CV :
+          {t("upload.cvLabel")}
           </label>
           <input
             type="file"
@@ -63,14 +67,14 @@ const UploadCV = () => {
             type="submit"
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
-            Ajouter CV
+            {t("upload.cvAdd")}
           </button>
           <button
             type="button"
             className="text-gray-500 font-bold hover:text-gray-700"
             onClick={() => navigate(`/worker/${id}`)}
           >
-            Annuler
+            {t("upload.annuler")}
           </button>
         </div>
       </form>
