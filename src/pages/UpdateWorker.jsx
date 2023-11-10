@@ -64,7 +64,6 @@ const UpdateWorker = () => {
       const response = await Axios.get(`${WORKERS_API}/${id}`);
       const workerData = response.data;
       const workerSkillsIRI = workerData.skills.map((skill) => `/api/skills/${skill.id}`);
-      console.log(workerData.user.id);
       // Utilisez {} pour envelopper les propriétés de l'objet
       setWorker({
         ...workerData,
@@ -75,7 +74,6 @@ const UpdateWorker = () => {
         return { value: skills.id, label: skills.name }
       });
       setSelectedSkills(tabSkills);
-      console.log(selectedSkills);
     } catch (error) {
       console.error(
         "Erreur lors de la récupération des données du travailleur:",
@@ -97,7 +95,6 @@ const UpdateWorker = () => {
 
   const handleSkillChange = (selectedOptions) => {
     const selectedSkills = selectedOptions.map((option) => `/api/skills/${option.value}`);
-    console.log(selectedOptions);
     setSelectedSkills(selectedOptions)
     setWorker({ ...worker, skills: selectedSkills });
   };
@@ -123,7 +120,6 @@ const UpdateWorker = () => {
       navigate("/workers");
     } catch ({ response }) {
       const { violations } = response.data;
-      console.log(response);
       if (violations) {
         violations.forEach((propertyPath, message) => {
           apiErrors[propertyPath] = message;
@@ -139,7 +135,6 @@ const UpdateWorker = () => {
   });
 
 
-  console.log(wskills);
   return (
     <div className="container mx-auto p-4">
       {/* {wskills} */}

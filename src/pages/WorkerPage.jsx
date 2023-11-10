@@ -80,7 +80,6 @@ const WorkerPage = () => {
         `${BASE_URL}api/workers/${id}/email`,
         {}
       );
-      console.log(response.data.message);
       // Traitez la réponse (par exemple, affichez un message de confirmation).
       if (response.data.message === "E-mail envoyé avec succès") {
         toast.success("E-mail envoyé avec succès");

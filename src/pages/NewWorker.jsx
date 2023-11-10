@@ -126,13 +126,11 @@ const NewWorker = () => {
       apiErrors.skills = "Les compétences sont obligatoires";
     setErrors(apiErrors);
     try {
-      console.log(worker);
       await Axios.post(`${WORKERS_API}`, worker);
       toast.success("Le travailleur a bien été enregistré");
       navigate("/workers");
     } catch ({ response }) {
       const { violations } = response.data;
-      console.log(response);
       if (violations) {
         violations.forEach((propertyPath, message) => {
           apiErrors[propertyPath] = message;
@@ -142,7 +140,6 @@ const NewWorker = () => {
       toast.error("Une erreur est survenue");
     }
   };
-  console.log(worker.skills);
 
   return (
     <div className="container mx-auto p-4">

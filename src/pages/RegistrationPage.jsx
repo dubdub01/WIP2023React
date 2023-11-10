@@ -60,7 +60,6 @@ const RegisterPage = () => {
             Math.random().toString().substring(2),
         },
       }).then((response) => {
-        console.log(response);
       });
       setErrors({});
       toast.success("Vous êtes inscrit, vous pouvez vous connecter");
@@ -76,14 +75,12 @@ const RegisterPage = () => {
       }
       toast.error("Des erreurs dans votre formulaire");
 
-      console.log(response.data);
     }
   };
 
   const handleFileChange = (event) => {
     const name = event.currentTarget.name;
     const myFile = event.currentTarget.files[0];
-    console.log(myFile);
     setUser({ ...user, [name]: myFile });
   };
 

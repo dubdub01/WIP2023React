@@ -42,7 +42,6 @@ const UserPage = () => {
   }, [token]);
   
 
-  console.log(user);
 
   const handleDeleteWorker = async (workerId) => {
     try {
@@ -54,7 +53,6 @@ const UserPage = () => {
       );
       setUser({ ...user, workers: updatedWorkers });
       // Afficher un message de succès ou utiliser une notification
-      console.log(`Le travailleur avec l'ID ${workerId} a été supprimé.`);
     } catch (error) {
       // Gérer les erreurs de suppression
       console.error(
@@ -75,7 +73,6 @@ const UserPage = () => {
       );
       setUser({ ...user, companies: updatedCompanies });
       // Afficher un message de succès ou utiliser une notification
-      console.log(`Le travailleur avec l'ID ${companyId} a été supprimé.`);
     } catch (error) {
       // Gérer les erreurs de suppression
       console.error(
@@ -97,8 +94,7 @@ const UserPage = () => {
       // Envoyer la note à la base de données
       const response = await Axios.post(
         `${BASE_URL}api/ratings/${workerId}/rating`,      );
-      console.log(response.data.message);
-      console.log(newValue)
+     
       // Traitez la réponse du backend si nécessaire
   
       setWorkerRatings({ ...workerRatings, [workerId]: newRating });

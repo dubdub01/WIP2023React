@@ -36,7 +36,6 @@ const NewCompany = () => {
         .then((userData) => {
           // Accédez aux données de l'utilisateur dans la réponse
           const userId = userData.id;
-          console.log(userData.id);
 
           // Mettez à jour l'état de l'utilisateur avec les données
           setUser(userData);
@@ -75,7 +74,6 @@ const NewCompany = () => {
       const data = await SectorsAPI.findAll();
       setSectors(data);
     } catch (error) {
-      console.log("Erreur lors de la récupération des secteurs:", error);
     }
   };
 
@@ -84,7 +82,6 @@ const NewCompany = () => {
       const data = await ProvincesAPI.findAll();
       setProvinces(data);
     } catch (error) {
-      console.log("Erreur lors de la récupération des provinces:", error);
     }
   };
 
@@ -130,7 +127,6 @@ const NewCompany = () => {
       apiErrors.provinces = "La province de l'entreprise est obligatoire";
     setErrors(apiErrors);
     try {
-      console.log(company);
       await Axios.post(`${COMPANIES_API}`, company);
       toast.success("L'entreprise a bien été créée");
       navigate("/companies");
@@ -154,7 +150,6 @@ const NewCompany = () => {
     id: sector.id,
   }));
 
-  console.log(sectorOptions);
 
   return (
     <div className="container mx-auto p-4">

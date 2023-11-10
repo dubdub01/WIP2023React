@@ -61,7 +61,6 @@ const UpdateCompany = () => {
       const data = await ProvincesAPI.findAll();
       setProvinces(data);
     } catch (error) {
-      console.log("Erreur lors de la récupération des provinces:", error);
     }
   };
 
@@ -73,7 +72,6 @@ const UpdateCompany = () => {
         (sector) => `/api/sectors/${sector.id}`
       );
 
-      console.log(companySectorsIRI);
       // Utilisez {} pour envelopper les propriétés de l'objet
       const companyProvinceIRI = `/api/provinces/${companyData.provinceName.id}`;
 
@@ -87,13 +85,11 @@ const UpdateCompany = () => {
         return { value: sectors.id, label: sectors.name };
       });
       setSelectedSectors(tabSectors);
-      console.log(selectedSectors);
 
       setSelectedProvince({
         value: companyData.provinceName.id,
         label: companyData.provinceName.name,
       });
-      console.log(response.data);
     } catch (error) {
       console.error(
         "Erreur lors de la récupération des données du travailleur:",
@@ -103,7 +99,6 @@ const UpdateCompany = () => {
   };
 
   const province = company.provinceName.name;
-  console.log(province);
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.currentTarget;
@@ -115,7 +110,6 @@ const UpdateCompany = () => {
     const selectedSectors = selectedOptions.map(
       (option) => `/api/sectors/${option.id}`
     );
-    console.log(selectedOptions);
     setSelectedSectors(selectedOptions);
     setCompany({ ...company, sector: selectedSectors });
   };
@@ -156,7 +150,6 @@ const UpdateCompany = () => {
       navigate("/companies");
     } catch ({ response }) {
       const { violations } = response.data;
-      console.log(response);
       if (violations) {
         violations.forEach((propertyPath, message) => {
           apiErrors[propertyPath] = message;
